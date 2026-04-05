@@ -2,33 +2,28 @@ const axios = require('axios');
 
 const BINANCE_API_URL = process.env.BINANCE_API_URL || 'https://api.binance.com/api/v3';
 
-// Cache để giảm API calls
 let cache = {
   allMarkets: null,
   lastUpdate: null,
-  cacheTime: 3000 // 3 seconds
+  cacheTime: 3000
 };
 
-// Mapping timeframe to Binance kline intervals
 const TIMEFRAME_TO_INTERVAL = {
-  '1h': '1m',   // 1 hour: 1-minute candles
-  '1d': '5m',   // 1 day: 5-minute candles
-  '1w': '1h',   // 1 week: 1-hour candles
-  '1M': '4h',   // 1 month: 4-hour candles
-  '1Y': '1d'    // 1 year: 1-day candles
+  '1h': '1m',
+  '1d': '5m',
+  '1w': '1h',
+  '1M': '4h',
+  '1Y': '1d'
 };
 
 const TIMEFRAME_TO_LIMIT = {
-  '1h': 60,     // 60 minutes
-  '1d': 288,    // 24h * 12 (5-min intervals)
-  '1w': 168,    // 7 days * 24 hours
-  '1M': 180,    // 30 days * 6 (4-hour intervals)
-  '1Y': 365     // 365 days
+  '1h': 60,
+  '1d': 288,
+  '1w': 168,
+  '1M': 180,
+  '1Y': 365
 };
 
-/**
- * Fetch tất cả trading pairs từ Binance (top 100 USDT pairs by volume)
- */
 async function getAllMarkets() {
   try {
     const now = Date.now();
@@ -64,9 +59,6 @@ async function getAllMarkets() {
   }
 }
 
-/**
- * Lấy popular coins (BNB, BTC, ETH cộng top volume)
- */
 async function getPopularCoins() {
   const markets = await getAllMarkets();
   const priorityOrder = ['BTC', 'ETH', 'BNB', 'XRP', 'SOL', 'ADA', 'DOGE', 'MATIC', 'AVAX', 'LTC'];
@@ -80,9 +72,6 @@ async function getPopularCoins() {
   return result.slice(0, 10);
 }
 
-/**
- * Top gainers (% tăng cao nhất)
- */
 async function getTopGainers() {
   const markets = await getAllMarkets();
   return markets
@@ -91,26 +80,16 @@ async function getTopGainers() {
     .slice(0, 10);
 }
 
-/**
- * Top volume
- */
 async function getTopVolume() {
   const markets = await getAllMarkets();
   return markets.slice(0, 10);
 }
 
-/**
- * New listings (giả lập)
- */
 async function getNewListings() {
   const markets = await getAllMarkets();
-  // Lấy từ index 20-30 để giả lập "mới"
   return markets.slice(20, 30);
 }
 
-/**
- * Historical price data từ Binance klines
- */
 async function getHistoricalPrices(symbol, timeframe = '1h') {
   try {
     const interval = TIMEFRAME_TO_INTERVAL[timeframe] || '1m';

@@ -1,4 +1,3 @@
-// Coin logo URLs from CoinGecko CDN
 const logos = {
   BTC: 'https://assets.coingecko.com/coins/images/1/small/bitcoin.png',
   ETH: 'https://assets.coingecko.com/coins/images/279/small/ethereum.png',
@@ -51,7 +50,7 @@ const names = {
 };
 
 export function getCoinLogo(symbol) {
-  return logos[symbol] || `https://assets.coingecko.com/coins/images/1/small/bitcoin.png`;
+  return logos[symbol] || 'https://assets.coingecko.com/coins/images/1/small/bitcoin.png';
 }
 
 export function getCoinColor(symbol) {

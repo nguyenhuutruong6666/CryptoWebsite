@@ -26,7 +26,6 @@ export default function PriceChart({ data, symbol, timeframe, onTimeframeChange,
 
   return (
     <div className="price-chart-container">
-      {/* Chart Header */}
       <div className="chart-header">
         <div className="chart-header-left">
           <h3 className="chart-title">Biểu đồ giá {symbol}</h3>
@@ -47,7 +46,6 @@ export default function PriceChart({ data, symbol, timeframe, onTimeframeChange,
         </div>
       </div>
 
-      {/* Chart Body */}
       {isLoading || data.length === 0 ? (
         <div className="chart-loading">
           <div className="spinner" />

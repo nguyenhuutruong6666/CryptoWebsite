@@ -10,7 +10,6 @@ const { initializeWebSocket } = require('./src/websocket/websocket');
 const app = express();
 const server = http.createServer(app);
 
-// CORS configuration
 const corsOptions = {
   origin: process.env.FRONTEND_URL || 'http://localhost:5173',
   credentials: true,
@@ -22,7 +21,6 @@ app.use(morgan('dev'));
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 
-// Socket.io setup
 const io = new Server(server, {
   cors: {
     origin: process.env.FRONTEND_URL || 'http://localhost:5173',
@@ -31,13 +29,10 @@ const io = new Server(server, {
   }
 });
 
-// Initialize WebSocket
 initializeWebSocket(io);
 
-// REST API routes
 app.use('/api/markets', marketRoutes);
 
-// Health check
 app.get('/health', (req, res) => {
   res.json({
     status: 'OK',
@@ -46,7 +41,6 @@ app.get('/health', (req, res) => {
   });
 });
 
-// Root endpoint
 app.get('/', (req, res) => {
   res.json({
     message: '🚀 CryptoWebsite API',
@@ -65,7 +59,6 @@ app.get('/', (req, res) => {
   });
 });
 
-// Error handling middleware
 app.use((err, req, res, next) => {
   const status = err.status || 500;
   res.status(status).json({ message: err.message || 'Internal Server Error' });
@@ -82,7 +75,6 @@ server.listen(PORT, () => {
   console.log('═══════════════════════════════════════');
 });
 
-// Graceful shutdown
 process.on('SIGINT', () => {
   console.log('\n🛑 Shutting down server...');
   server.close(() => {

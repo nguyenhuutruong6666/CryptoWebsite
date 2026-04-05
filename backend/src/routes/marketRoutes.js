@@ -2,7 +2,6 @@ const express = require('express');
 const router = express.Router();
 const binanceService = require('../services/binanceService');
 
-// GET /api/markets/all
 router.get('/all', async (req, res) => {
   try {
     const markets = await binanceService.getAllMarkets();
@@ -12,7 +11,6 @@ router.get('/all', async (req, res) => {
   }
 });
 
-// GET /api/markets/popular
 router.get('/popular', async (req, res) => {
   try {
     const popular = await binanceService.getPopularCoins();
@@ -22,7 +20,6 @@ router.get('/popular', async (req, res) => {
   }
 });
 
-// GET /api/markets/gainers
 router.get('/gainers', async (req, res) => {
   try {
     const gainers = await binanceService.getTopGainers();
@@ -32,7 +29,6 @@ router.get('/gainers', async (req, res) => {
   }
 });
 
-// GET /api/markets/volume
 router.get('/volume', async (req, res) => {
   try {
     const topVolume = await binanceService.getTopVolume();
@@ -42,7 +38,6 @@ router.get('/volume', async (req, res) => {
   }
 });
 
-// GET /api/markets/new
 router.get('/new', async (req, res) => {
   try {
     const newListings = await binanceService.getNewListings();
@@ -52,7 +47,6 @@ router.get('/new', async (req, res) => {
   }
 });
 
-// GET /api/markets/history/:symbol?timeframe=1h
 router.get('/history/:symbol', async (req, res) => {
   try {
     const { symbol } = req.params;

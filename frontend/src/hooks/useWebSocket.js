@@ -27,14 +27,12 @@ export function useWebSocket() {
       setIsConnected(false);
     });
 
-    // Nhận dữ liệu ban đầu
     socketInstance.on('initialData', (data) => {
       console.log('📊 Initial data:', data.markets.length, 'coins');
       setMarkets(data.markets);
       setLastUpdate(data.timestamp);
     });
 
-    // Cập nhật giá realtime
     socketInstance.on('priceUpdate', (data) => {
       setMarkets(data.markets);
       setLastUpdate(data.timestamp);

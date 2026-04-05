@@ -2,16 +2,12 @@ const binanceService = require('../services/binanceService');
 
 let updateInterval = null;
 
-/**
- * Initialize Socket.IO WebSocket server
- */
 function initializeWebSocket(io) {
   console.log('🔌 WebSocket server initialized');
 
   io.on('connection', (socket) => {
     console.log(`✅ Client connected: ${socket.id}`);
 
-    // Gửi data ban đầu
     sendInitialData(socket);
 
     socket.on('disconnect', () => {
@@ -19,7 +15,6 @@ function initializeWebSocket(io) {
     });
   });
 
-  // Bắt đầu push updates định kỳ
   startPriceUpdates(io);
 }
 
@@ -38,7 +33,6 @@ async function sendInitialData(socket) {
 function startPriceUpdates(io) {
   if (updateInterval) clearInterval(updateInterval);
 
-  // Cập nhật mỗi 2 giây
   updateInterval = setInterval(async () => {
     try {
       const markets = await binanceService.getAllMarkets();

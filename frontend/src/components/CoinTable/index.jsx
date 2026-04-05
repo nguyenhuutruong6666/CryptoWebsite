@@ -14,7 +14,6 @@ export default function CoinTable({ searchQuery = '', activeFilter = 'all' }) {
   const [flashingCells, setFlashingCells] = useState(new Set());
   const prevPricesRef = useRef(new Map());
 
-  // Flash animation when price changes
   useEffect(() => {
     const newFlashing = new Set();
     markets.forEach(coin => {
@@ -77,7 +76,6 @@ export default function CoinTable({ searchQuery = '', activeFilter = 'all' }) {
 
   return (
     <div className="coin-table-container">
-      {/* Header */}
       <div className="coin-table-header">
         <h2 className="coin-table-title">Thị trường Crypto</h2>
         <div className="connection-status">
@@ -87,7 +85,6 @@ export default function CoinTable({ searchQuery = '', activeFilter = 'all' }) {
         </div>
       </div>
 
-      {/* Table */}
       <div className="coin-table-wrapper">
         <table className="coin-table">
           <thead>
@@ -173,7 +170,6 @@ export default function CoinTable({ searchQuery = '', activeFilter = 'all' }) {
   );
 }
 
-// Mini sparkline placeholder
 function MiniSparkline({ positive }) {
   const color = positive ? '#0ECB81' : '#F6465D';
   const points = positive

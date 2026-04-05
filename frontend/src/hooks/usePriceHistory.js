@@ -9,7 +9,6 @@ export function usePriceHistory(symbol, timeframe = '1h') {
   const prevPriceRef = useRef(null);
   const lastUpdateRef = useRef(0);
 
-  // Fetch lịch sử khi symbol hoặc timeframe thay đổi
   useEffect(() => {
     if (!symbol) return;
 
@@ -33,7 +32,6 @@ export function usePriceHistory(symbol, timeframe = '1h') {
     lastUpdateRef.current = 0;
   }, [symbol, timeframe]);
 
-  // Append real-time point chỉ với timeframe 1h
   useEffect(() => {
     if (timeframe !== '1h' || isLoading) return;
 

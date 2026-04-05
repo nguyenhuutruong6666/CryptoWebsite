@@ -1,6 +1,3 @@
-/**
- * Format số tiền lớn thành K/M/B
- */
 export function formatNumber(num, decimals = 2) {
   if (!num && num !== 0) return '$0.00';
   if (num >= 1e9) return `$${(num / 1e9).toFixed(decimals)}B`;
@@ -9,9 +6,6 @@ export function formatNumber(num, decimals = 2) {
   return `$${num.toFixed(decimals)}`;
 }
 
-/**
- * Format giá coin với số thập phân phù hợp
- */
 export function formatPrice(price) {
   if (!price) return '$0.00';
   const decimals = price < 1 ? 8 : 2;
@@ -21,18 +15,12 @@ export function formatPrice(price) {
   })}`;
 }
 
-/**
- * Format % thay đổi
- */
 export function formatPercent(change) {
   if (change === undefined || change === null) return '0.00%';
   const sign = change >= 0 ? '+' : '';
   return `${sign}${change.toFixed(2)}%`;
 }
 
-/**
- * Format timestamp theo timeframe
- */
 export function formatTime(timestamp, timeframe = '1h') {
   const date = new Date(timestamp);
   switch (timeframe) {
@@ -50,9 +38,6 @@ export function formatTime(timestamp, timeframe = '1h') {
   }
 }
 
-/**
- * Format ngày tháng đầy đủ
- */
 export function formatDate(timestamp) {
   return new Date(timestamp).toLocaleDateString('vi-VN', {
     day: '2-digit',

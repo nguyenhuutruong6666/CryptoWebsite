@@ -19,7 +19,6 @@ export default function CoinDetailPage() {
 
   const coin = markets.find(m => m.symbol === symbol?.toUpperCase());
 
-  // Loading state
   if (!coin && markets.length === 0) {
     return (
       <div className="coin-detail-page">
@@ -32,7 +31,6 @@ export default function CoinDetailPage() {
     );
   }
 
-  // Not found
   if (!coin && markets.length > 0) {
     return (
       <div className="coin-detail-page">
@@ -56,7 +54,6 @@ export default function CoinDetailPage() {
       <Navbar />
 
       <main className="coin-detail-main">
-        {/* Coin Header */}
         <div className="coin-detail-header">
           <button onClick={() => navigate(-1)} className="back-btn">
             ← Quay lại
@@ -97,7 +94,6 @@ export default function CoinDetailPage() {
           </div>
         </div>
 
-        {/* Price Chart */}
         <PriceChart
           data={priceHistory}
           symbol={coin?.symbol}
@@ -106,7 +102,6 @@ export default function CoinDetailPage() {
           isLoading={isLoading}
         />
 
-        {/* Coin Stats */}
         {coin && <CoinStats coin={coin} />}
       </main>
     </div>

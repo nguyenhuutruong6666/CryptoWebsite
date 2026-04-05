@@ -26,7 +26,6 @@ export default function FilterTabs({ activeFilter, onFilterChange }) {
 
   return (
     <div className="filter-tabs-container">
-      {/* Main Tabs */}
       <div className="filter-main-tabs">
         {MAIN_TABS.map(tab => (
           <button
@@ -39,7 +38,6 @@ export default function FilterTabs({ activeFilter, onFilterChange }) {
         ))}
       </div>
 
-      {/* Filter Tags */}
       <div className="filter-tags">
         {FILTER_TAGS.map(filter => (
           <button
