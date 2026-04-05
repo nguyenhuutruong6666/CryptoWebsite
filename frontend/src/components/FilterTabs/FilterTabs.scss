@@ -1,0 +1,79 @@
+@use '../../styles/variables' as *;
+
+.filter-tabs-container {
+  max-width: $max-width;
+  margin: 0 auto;
+  padding: $spacing-sm $spacing-lg 0;
+  border-bottom: 1px solid $border-color;
+}
+
+.filter-main-tabs {
+  display: flex;
+  gap: 0;
+
+  .filter-main-tab {
+    background: transparent;
+    border: none;
+    color: $text-secondary;
+    font-size: $font-size-base;
+    font-weight: 500;
+    padding: 12px $spacing-md;
+    cursor: pointer;
+    position: relative;
+    transition: color $transition-base;
+
+    &:hover {
+      color: $text-primary;
+    }
+
+    &.active {
+      color: $text-primary;
+      &::after {
+        content: '';
+        position: absolute;
+        bottom: 0;
+        left: 0;
+        right: 0;
+        height: 2px;
+        background-color: $yellow;
+      }
+    }
+  }
+}
+
+.filter-tags {
+  display: flex;
+  gap: $spacing-xs;
+  padding: $spacing-sm 0;
+  flex-wrap: wrap;
+
+  .filter-tag {
+    background: transparent;
+    border: 1px solid $border-color;
+    color: $text-secondary;
+    font-size: $font-size-sm;
+    padding: 4px 12px;
+    border-radius: 20px;
+    cursor: pointer;
+    transition: all $transition-base;
+
+    &:hover {
+      background-color: $bg-hover;
+      color: $text-primary;
+      border-color: $bg-hover;
+    }
+
+    &.active {
+      background-color: $yellow-light;
+      color: $yellow;
+      border-color: $yellow;
+    }
+  }
+}
+
+@media (max-width: 768px) {
+  .filter-main-tabs {
+    overflow-x: auto;
+    &::-webkit-scrollbar { display: none; }
+  }
+}

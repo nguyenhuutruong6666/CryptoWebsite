@@ -1,0 +1,10 @@
+@use '../../styles/variables' as *;
+
+.home-page {
+  min-height: 100vh;
+  background-color: $bg-primary;
+}
+
+.home-main {
+  padding-bottom: 40px;
+}

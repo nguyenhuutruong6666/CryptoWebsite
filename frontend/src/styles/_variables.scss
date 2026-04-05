@@ -1,0 +1,60 @@
+// ============================================
+// Global SCSS Variables - CryptoWebsite Theme
+// ============================================
+
+// Background colors
+$bg-primary: #0B0E11;
+$bg-secondary: #1E2329;
+$bg-hover: #2B3139;
+$bg-card: #1E2329;
+
+// Brand colors
+$yellow: #F3BA2F;
+$yellow-hover: #e5ab1a;
+$yellow-light: rgba(243, 186, 47, 0.1);
+
+// Status colors
+$green: #0ECB81;
+$green-bg: rgba(14, 203, 129, 0.1);
+$red: #F6465D;
+$red-bg: rgba(246, 70, 93, 0.1);
+
+// Text colors
+$text-primary: #EAECEF;
+$text-secondary: #848E9C;
+$text-muted: #5E6875;
+
+// Border
+$border-color: #2B3139;
+$border-radius-sm: 4px;
+$border-radius-md: 8px;
+$border-radius-lg: 12px;
+
+// Spacing
+$spacing-xs: 4px;
+$spacing-sm: 8px;
+$spacing-md: 16px;
+$spacing-lg: 24px;
+$spacing-xl: 32px;
+
+// Typography
+$font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Inter', sans-serif;
+$font-size-xs: 11px;
+$font-size-sm: 12px;
+$font-size-base: 14px;
+$font-size-md: 16px;
+$font-size-lg: 18px;
+$font-size-xl: 24px;
+
+// Transitions
+$transition-fast: 0.15s ease;
+$transition-base: 0.2s ease;
+$transition-slow: 0.3s ease;
+
+// Container
+$max-width: 1440px;
+$navbar-height: 64px;
+
+// Shadows
+$shadow-card: 0 4px 12px rgba(0, 0, 0, 0.3);
+$shadow-dropdown: 0 8px 24px rgba(0, 0, 0, 0.4);

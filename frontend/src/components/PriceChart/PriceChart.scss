@@ -1,0 +1,84 @@
+@use '../../styles/variables' as *;
+
+.price-chart-container {
+  background-color: $bg-secondary;
+  border-radius: $border-radius-md;
+  border: 1px solid $border-color;
+  padding: $spacing-lg;
+  margin-bottom: $spacing-md;
+}
+
+.chart-header {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  margin-bottom: $spacing-lg;
+  flex-wrap: wrap;
+  gap: $spacing-md;
+
+  .chart-header-left {
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+
+    .chart-title {
+      font-size: $font-size-md;
+      font-weight: 600;
+      color: $text-primary;
+    }
+
+    .chart-subtitle {
+      font-size: $font-size-sm;
+      color: $text-secondary;
+    }
+  }
+
+  .timeframe-buttons {
+    display: flex;
+    gap: 4px;
+
+    .timeframe-btn {
+      background: transparent;
+      border: 1px solid $border-color;
+      color: $text-secondary;
+      font-size: $font-size-sm;
+      padding: 5px 12px;
+      border-radius: $border-radius-sm;
+      cursor: pointer;
+      transition: all $transition-base;
+
+      &:hover {
+        background-color: $bg-hover;
+        color: $text-primary;
+        border-color: $bg-hover;
+      }
+
+      &.active {
+        background-color: $yellow-light;
+        color: $yellow;
+        border-color: $yellow;
+        font-weight: 600;
+      }
+    }
+  }
+}
+
+.chart-loading {
+  height: 380px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: $spacing-md;
+  color: $text-secondary;
+  font-size: $font-size-base;
+}
+
+@media (max-width: 600px) {
+  .chart-header {
+    flex-direction: column;
+    .timeframe-buttons {
+      flex-wrap: wrap;
+    }
+  }
+}

@@ -1,0 +1,61 @@
+@use '../../styles/variables' as *;
+
+.coin-stats-container {
+  background-color: $bg-secondary;
+  border: 1px solid $border-color;
+  border-radius: $border-radius-md;
+  padding: $spacing-lg;
+}
+
+.coin-stats-title {
+  font-size: $font-size-md;
+  font-weight: 600;
+  color: $text-primary;
+  margin-bottom: $spacing-lg;
+}
+
+.coin-stats-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: $spacing-md;
+}
+
+.stat-card {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  padding: $spacing-md;
+  background-color: $bg-primary;
+  border-radius: $border-radius-sm;
+  border: 1px solid $border-color;
+
+  .stat-label {
+    font-size: $font-size-sm;
+    color: $text-secondary;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+  }
+
+  .stat-value {
+    font-size: $font-size-md;
+    font-weight: 600;
+    font-variant-numeric: tabular-nums;
+
+    &.green  { color: $green; }
+    &.red    { color: $red; }
+    &.yellow { color: $yellow; }
+    &.primary { color: $text-primary; }
+  }
+}
+
+@media (max-width: 768px) {
+  .coin-stats-grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+
+@media (max-width: 480px) {
+  .coin-stats-grid {
+    grid-template-columns: 1fr;
+  }
+}
