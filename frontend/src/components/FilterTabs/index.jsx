@@ -1,13 +1,6 @@
 import { useState } from 'react';
 import './FilterTabs.scss';
 
-const MAIN_TABS = [
-  { id: 'favorites', label: '⭐ Yêu thích' },
-  { id: 'crypto', label: 'Tiền mã hóa' },
-  { id: 'spot', label: 'Giao ngay' },
-  { id: 'futures', label: 'Hợp đồng tương lai' },
-];
-
 const FILTER_TAGS = [
   { id: 'all', label: 'Tất cả' },
   { id: 'bnb', label: 'BNB Chain' },
@@ -22,22 +15,8 @@ const FILTER_TAGS = [
 ];
 
 export default function FilterTabs({ activeFilter, onFilterChange }) {
-  const [activeMainTab, setActiveMainTab] = useState('crypto');
-
   return (
     <div className="filter-tabs-container">
-      <div className="filter-main-tabs">
-        {MAIN_TABS.map(tab => (
-          <button
-            key={tab.id}
-            className={`filter-main-tab ${activeMainTab === tab.id ? 'active' : ''}`}
-            onClick={() => setActiveMainTab(tab.id)}
-          >
-            {tab.label}
-          </button>
-        ))}
-      </div>
-
       <div className="filter-tags">
         {FILTER_TAGS.map(filter => (
           <button

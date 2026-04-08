@@ -1,0 +1,370 @@
+@use '../../styles/variables' as *;
+
+.profile-page {
+  min-height: 100vh;
+  background-color: $bg-primary;
+}
+
+.profile-main {
+  max-width: $max-width;
+  margin: 0 auto;
+  padding: $spacing-xl $spacing-lg;
+  display: flex;
+  gap: $spacing-xl;
+
+  @media (max-width: 1024px) {
+    flex-direction: column;
+    padding: $spacing-lg;
+  }
+}
+
+// ============== Sidebar ==============
+.profile-sidebar {
+  width: 280px;
+  flex-shrink: 0;
+
+  @media (max-width: 1024px) {
+    width: 100%;
+  }
+}
+
+.user-brief {
+  background-color: $bg-secondary;
+  border-radius: $border-radius-md;
+  border: 1px solid $border-color;
+  padding: $spacing-lg;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+  margin-bottom: $spacing-md;
+
+  .avatar-wrapper {
+    position: relative;
+    margin-bottom: $spacing-md;
+
+    .avatar {
+      width: 72px;
+      height: 72px;
+      background-color: $yellow;
+      color: #000;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 32px;
+      font-weight: 700;
+    }
+
+    .tier-badge {
+      position: absolute;
+      bottom: -4px;
+      left: 50%;
+      transform: translateX(-50%);
+      background-color: #1a1a1a;
+      color: $yellow;
+      border: 1px solid $yellow;
+      font-size: 10px;
+      font-weight: 700;
+      padding: 2px 8px;
+      border-radius: 12px;
+      white-space: nowrap;
+    }
+  }
+
+  .user-name {
+    font-size: $font-size-lg;
+    font-weight: 600;
+    color: $text-primary;
+    margin-bottom: 4px;
+  }
+
+  .user-id {
+    font-size: $font-size-sm;
+    color: $text-secondary;
+  }
+}
+
+.profile-nav {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  background-color: $bg-secondary;
+  border-radius: $border-radius-md;
+  border: 1px solid $border-color;
+  padding: $spacing-sm;
+
+  .nav-item {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    padding: 12px $spacing-md;
+    background: transparent;
+    border: none;
+    color: $text-secondary;
+    font-size: $font-size-base;
+    font-weight: 500;
+    cursor: pointer;
+    border-radius: $border-radius-sm;
+    transition: all $transition-base;
+    text-align: left;
+
+    svg {
+      width: 20px;
+      height: 20px;
+    }
+
+    &:hover {
+      color: $text-primary;
+      background-color: $bg-hover;
+    }
+
+    &.active {
+      color: $yellow;
+      background-color: $yellow-light;
+      font-weight: 600;
+    }
+  }
+}
+
+// ============== Main Content ==============
+.profile-content {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  gap: $spacing-xl;
+}
+
+.content-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+
+  .content-title {
+    font-size: 28px;
+    font-weight: 700;
+    color: $text-primary;
+    margin: 0;
+  }
+
+  .btn-logout {
+    background: transparent;
+    border: 1px solid $border-color;
+    color: $text-secondary;
+    font-size: $font-size-sm;
+    font-weight: 600;
+    padding: 8px $spacing-lg;
+    border-radius: $border-radius-sm;
+    cursor: pointer;
+    transition: all $transition-base;
+
+    &:hover {
+      color: $red;
+      border-color: $red;
+      background-color: $red-bg;
+    }
+  }
+}
+
+// Stats Grid
+.stats-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: $spacing-md;
+
+  @media (max-width: 768px) {
+    grid-template-columns: 1fr;
+  }
+}
+
+.stat-card {
+  background-color: $bg-secondary;
+  border: 1px solid $border-color;
+  border-radius: $border-radius-md;
+  padding: $spacing-lg;
+
+  .stat-label {
+    font-size: $font-size-sm;
+    color: $text-secondary;
+    margin-bottom: 8px;
+  }
+
+  .stat-value-row {
+    display: flex;
+    align-items: baseline;
+    gap: 12px;
+
+    .stat-value {
+      font-size: 24px;
+      font-weight: 700;
+      color: $text-primary;
+      margin: 0;
+    }
+
+    .stat-change {
+      font-size: $font-size-sm;
+      font-weight: 600;
+
+      &.positive { color: $green; }
+      &.negative { color: $red; }
+    }
+  }
+}
+
+// Sections
+.info-section {
+  background-color: $bg-secondary;
+  border: 1px solid $border-color;
+  border-radius: $border-radius-md;
+  padding: $spacing-xl;
+
+  .section-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: $spacing-xl;
+
+    h2 {
+      font-size: 20px;
+      font-weight: 600;
+      color: $text-primary;
+      margin: 0;
+    }
+  }
+}
+
+.btn-edit, .btn-save, .btn-cancel {
+  border: none;
+  font-size: $font-size-sm;
+  font-weight: 600;
+  padding: 8px $spacing-lg;
+  border-radius: $border-radius-sm;
+  cursor: pointer;
+  transition: all $transition-base;
+}
+
+.btn-edit {
+  background-color: $bg-hover;
+  color: $text-primary;
+  &:hover { background-color: #353c45; }
+}
+
+.edit-actions {
+  display: flex;
+  gap: $spacing-sm;
+
+  .btn-cancel {
+    background: transparent;
+    color: $text-secondary;
+    &:hover { color: $text-primary; }
+  }
+
+  .btn-save {
+    background-color: $yellow;
+    color: #000;
+    &:hover { background-color: $yellow-hover; }
+  }
+}
+
+.info-grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: $spacing-xl $spacing-lg;
+
+  @media (max-width: 768px) {
+    grid-template-columns: 1fr;
+  }
+
+  // Override FormInput disabled style
+  .form-input:disabled {
+    background-color: transparent;
+    border-color: transparent;
+    padding-left: 0;
+    padding-right: 0;
+    color: $text-primary;
+    opacity: 1;
+    font-weight: 500;
+  }
+  
+  .form-input-group.has-error:disabled .form-input {
+      border-color: transparent;
+      box-shadow: none;
+  }
+
+  .info-item {
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+
+    .form-label {
+      font-size: $font-size-sm;
+      font-weight: 500;
+      color: $text-secondary;
+    }
+  }
+  
+  .verification-status {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      padding: 11px 0;
+  }
+}
+
+// Activity List
+.activity-list {
+  display: flex;
+  flex-direction: column;
+  gap: $spacing-md;
+
+  .activity-item {
+    display: flex;
+    align-items: center;
+    gap: $spacing-md;
+    padding-bottom: $spacing-md;
+    border-bottom: 1px solid $border-color;
+
+    &:last-child {
+      padding-bottom: 0;
+      border-bottom: none;
+    }
+  }
+
+  .activity-icon {
+    width: 40px;
+    height: 40px;
+    background-color: $bg-hover;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: $text-secondary;
+
+    svg {
+      width: 20px;
+      height: 20px;
+    }
+  }
+
+  .activity-details {
+    flex: 1;
+
+    .activity-action {
+      font-size: $font-size-base;
+      font-weight: 500;
+      color: $text-primary;
+      margin: 0 0 4px 0;
+    }
+
+    .activity-meta {
+      font-size: $font-size-sm;
+      color: $text-secondary;
+      margin: 0;
+    }
+  }
+
+  .activity-time {
+    font-size: $font-size-sm;
+    color: $text-secondary;
+  }
+}

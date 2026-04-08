@@ -1,0 +1,39 @@
+@use '../../styles/variables' as *;
+
+.favorites-page {
+  min-height: 100vh;
+  background-color: $bg-primary;
+}
+
+.favorites-main {
+  padding-bottom: 40px;
+}
+
+.favorites-header {
+  max-width: $max-width;
+  margin: 0 auto;
+  padding: $spacing-xl $spacing-lg $spacing-md;
+
+  h1 {
+    font-size: 32px;
+    font-weight: 700;
+    color: $text-primary;
+    margin-bottom: 8px;
+  }
+
+  p {
+    font-size: $font-size-md;
+    color: $text-secondary;
+    margin: 0;
+  }
+}
+
+@media (max-width: 768px) {
+  .favorites-header {
+    padding: $spacing-lg $spacing-md;
+    
+    h1 {
+      font-size: 24px;
+    }
+  }
+}

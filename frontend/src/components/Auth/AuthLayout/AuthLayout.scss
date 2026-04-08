@@ -1,0 +1,200 @@
+@use '../../../styles/variables' as *;
+
+.auth-layout {
+  display: flex;
+  min-height: 100vh;
+  background-color: $bg-primary;
+}
+
+// ============== Left Brand Panel ==============
+
+.auth-brand-panel {
+  flex: 1;
+  background: linear-gradient(145deg, #0f1923 0%, #0B0E11 40%, #1a1200 100%);
+  position: relative;
+  overflow: hidden;
+  display: flex;
+  align-items: stretch;
+
+  @media (max-width: 900px) {
+    display: none;
+  }
+}
+
+.auth-brand-inner {
+  position: relative;
+  z-index: 2;
+  display: flex;
+  flex-direction: column;
+  padding: 40px 48px;
+  width: 100%;
+}
+
+.auth-brand-logo {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  text-decoration: none;
+  width: fit-content;
+
+  .auth-logo-icon {
+    font-size: 28px;
+    color: $yellow;
+  }
+
+  .auth-logo-text {
+    font-size: 26px;
+    font-weight: 700;
+    color: $yellow;
+    letter-spacing: -0.5px;
+  }
+}
+
+.auth-brand-content {
+  margin-top: auto;
+  margin-bottom: auto;
+
+  .auth-brand-title {
+    font-size: 38px;
+    font-weight: 800;
+    color: $text-primary;
+    line-height: 1.2;
+    margin-bottom: $spacing-md;
+    letter-spacing: -0.5px;
+  }
+
+  .auth-brand-highlight {
+    color: $yellow;
+  }
+
+  .auth-brand-desc {
+    font-size: $font-size-base;
+    color: $text-secondary;
+    line-height: 1.7;
+    max-width: 380px;
+    margin-bottom: $spacing-xl;
+  }
+}
+
+.auth-brand-stats {
+  display: flex;
+  gap: $spacing-xl;
+
+  .auth-stat-item {
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+
+    .auth-stat-value {
+      font-size: 22px;
+      font-weight: 700;
+      color: $yellow;
+    }
+
+    .auth-stat-label {
+      font-size: $font-size-sm;
+      color: $text-secondary;
+    }
+  }
+}
+
+// Floating orbs
+.auth-brand-orbs {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+
+  .orb {
+    position: absolute;
+    border-radius: 50%;
+    filter: blur(70px);
+    opacity: 0.15;
+
+    &-1 {
+      width: 300px;
+      height: 300px;
+      background: $yellow;
+      top: -80px;
+      right: -60px;
+    }
+
+    &-2 {
+      width: 200px;
+      height: 200px;
+      background: #2b7aff;
+      bottom: 100px;
+      right: 60px;
+    }
+
+    &-3 {
+      width: 150px;
+      height: 150px;
+      background: $green;
+      bottom: -40px;
+      left: 40px;
+    }
+  }
+}
+
+// Ticker strip at bottom
+.auth-ticker-strip {
+  display: flex;
+  gap: $spacing-lg;
+  padding: 10px 0;
+  border-top: 1px solid rgba(255, 255, 255, 0.07);
+  margin-top: auto;
+
+  .ticker-item {
+    font-size: $font-size-sm;
+    font-weight: 500;
+    color: $text-secondary;
+    white-space: nowrap;
+
+    &::before {
+      content: '●';
+      color: $green;
+      margin-right: 6px;
+      font-size: 8px;
+    }
+  }
+}
+
+// ============== Right Form Panel ==============
+
+.auth-form-panel {
+  width: 480px;
+  flex-shrink: 0;
+  background-color: $bg-secondary;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  overflow-y: auto;
+  padding: 40px 24px;
+
+  @media (max-width: 900px) {
+    width: 100%;
+  }
+}
+
+.auth-form-inner {
+  width: 100%;
+  max-width: 400px;
+}
+
+.auth-form-header {
+  margin-bottom: 28px;
+
+  .auth-form-title {
+    font-size: 24px;
+    font-weight: 700;
+    color: $text-primary;
+    margin-bottom: 8px;
+    letter-spacing: -0.3px;
+  }
+
+  .auth-form-subtitle {
+    font-size: $font-size-base;
+    color: $text-secondary;
+    line-height: 1.5;
+  }
+}

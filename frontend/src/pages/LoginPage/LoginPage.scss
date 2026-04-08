@@ -1,0 +1,173 @@
+@use '../../styles/variables' as *;
+
+.login-form {
+  display: flex;
+  flex-direction: column;
+  gap: $spacing-md;
+}
+
+.login-options {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-top: 4px;
+  margin-bottom: $spacing-sm;
+
+  .remember-me {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    cursor: pointer;
+    font-size: $font-size-sm;
+    color: $text-secondary;
+    user-select: none;
+
+    input {
+      display: none;
+    }
+
+    .checkmark {
+      width: 16px;
+      height: 16px;
+      border: 1px solid $border-color;
+      border-radius: 4px;
+      background-color: $bg-primary;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      transition: all $transition-fast;
+
+      &::after {
+        content: '';
+        width: 4px;
+        height: 8px;
+        border: solid $bg-primary;
+        border-width: 0 2px 2px 0;
+        transform: rotate(45deg);
+        display: none;
+      }
+    }
+
+    input:checked ~ .checkmark {
+      background-color: $yellow;
+      border-color: $yellow;
+      
+      &::after {
+        display: block;
+      }
+    }
+
+    &:hover .checkmark {
+      border-color: $yellow;
+    }
+  }
+
+  .forgot-link {
+    font-size: $font-size-sm;
+    color: $yellow;
+    text-decoration: none;
+    font-weight: 500;
+
+    &:hover {
+      text-decoration: underline;
+    }
+  }
+}
+
+.btn-submit {
+  width: 100%;
+  height: 48px;
+  background-color: $yellow;
+  color: #000;
+  border: none;
+  border-radius: $border-radius-sm;
+  font-size: $font-size-md;
+  font-weight: 600;
+  cursor: pointer;
+  transition: background-color $transition-base;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  &:hover:not(:disabled) {
+    background-color: $yellow-hover;
+  }
+
+  &.loading {
+    background-color: rgba(243, 186, 47, 0.7);
+    cursor: not-allowed;
+  }
+
+  .btn-spinner {
+    width: 20px;
+    height: 20px;
+    border: 2px solid rgba(0, 0, 0, 0.2);
+    border-top-color: #000;
+    border-radius: 50%;
+    animation: spin 0.8s linear infinite;
+  }
+}
+
+.auth-divider {
+  display: flex;
+  align-items: center;
+  text-align: center;
+  color: $text-secondary;
+  font-size: $font-size-sm;
+  margin: $spacing-md 0;
+
+  &::before,
+  &::after {
+    content: '';
+    flex: 1;
+    border-bottom: 1px solid $border-color;
+  }
+
+  span {
+    padding: 0 $spacing-md;
+  }
+}
+
+.social-buttons {
+  display: flex;
+  gap: $spacing-md;
+
+  .social-btn {
+    flex: 1;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 10px;
+    height: 44px;
+    background-color: $bg-primary;
+    border: 1px solid $border-color;
+    border-radius: $border-radius-sm;
+    color: $text-primary;
+    font-size: $font-size-base;
+    font-weight: 500;
+    cursor: pointer;
+    transition: all $transition-base;
+
+    &:hover {
+      background-color: $bg-hover;
+      border-color: $text-secondary;
+    }
+  }
+}
+
+.auth-switch {
+  text-align: center;
+  margin-top: $spacing-xl;
+  font-size: $font-size-base;
+  color: $text-secondary;
+
+  .auth-switch-link {
+    color: $yellow;
+    text-decoration: none;
+    font-weight: 600;
+
+    &:hover {
+      text-decoration: underline;
+    }
+  }
+}

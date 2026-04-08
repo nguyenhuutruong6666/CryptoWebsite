@@ -7,7 +7,7 @@ import './CoinTable.scss';
 
 const PRIORITY_COINS = ['BTC', 'ETH', 'USDT', 'BNB', 'XRP', 'USDC', 'SOL', 'ADA', 'DOGE', 'MATIC'];
 
-export default function CoinTable({ searchQuery = '', activeFilter = 'all' }) {
+export default function CoinTable({ searchQuery = '', activeFilter = 'all', favoriteSymbols = null }) {
   const { markets, isConnected } = useMarket();
   const [sortBy, setSortBy] = useState('volume');
   const [sortOrder, setSortOrder] = useState('desc');
@@ -46,6 +46,8 @@ export default function CoinTable({ searchQuery = '', activeFilter = 'all' }) {
   );
 
   const filteredMarkets = markets.filter(coin => {
+    if (favoriteSymbols && !favoriteSymbols.includes(coin.symbol)) return false;
+    
     if (searchQuery) {
       const q = searchQuery.toLowerCase();
       return coin.symbol.toLowerCase().includes(q) || getCoinName(coin.symbol).toLowerCase().includes(q);

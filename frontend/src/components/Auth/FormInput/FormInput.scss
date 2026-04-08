@@ -1,0 +1,120 @@
+@use '../../../styles/variables' as *;
+
+.form-input-group {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+
+  .form-label {
+    font-size: $font-size-sm;
+    font-weight: 500;
+    color: $text-secondary;
+    letter-spacing: 0.3px;
+
+    .required-mark {
+      color: $red;
+      margin-left: 3px;
+    }
+  }
+
+  .input-wrapper {
+    position: relative;
+    display: flex;
+    align-items: center;
+
+    .input-icon {
+      position: absolute;
+      left: 12px;
+      color: $text-secondary;
+      display: flex;
+      align-items: center;
+      pointer-events: none;
+      font-size: 16px;
+
+      svg {
+        width: 17px;
+        height: 17px;
+        stroke: $text-secondary;
+      }
+    }
+
+    .form-input {
+      width: 100%;
+      background-color: $bg-primary;
+      border: 1px solid $border-color;
+      border-radius: $border-radius-sm;
+      color: $text-primary;
+      font-size: $font-size-base;
+      font-family: $font-family;
+      padding: 11px 14px;
+      transition: border-color $transition-base, box-shadow $transition-base;
+      outline: none;
+
+      &::placeholder {
+        color: $text-muted;
+      }
+
+      &:focus {
+        border-color: $yellow;
+        box-shadow: 0 0 0 3px rgba(243, 186, 47, 0.12);
+      }
+
+      &.has-icon {
+        padding-left: 42px;
+      }
+
+      &.has-toggle {
+        padding-right: 44px;
+      }
+    }
+
+    .password-toggle {
+      position: absolute;
+      right: 10px;
+      background: transparent;
+      border: none;
+      color: $text-secondary;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 4px;
+      cursor: pointer;
+      transition: color $transition-base;
+      border-radius: 4px;
+
+      &:hover {
+        color: $text-primary;
+      }
+
+      svg {
+        width: 17px;
+        height: 17px;
+      }
+    }
+  }
+
+  .input-error {
+    font-size: $font-size-sm;
+    color: $red;
+    margin: 0;
+    display: flex;
+    align-items: center;
+    gap: 4px;
+
+    &::before {
+      content: '⚠';
+      font-size: 11px;
+    }
+  }
+
+  .input-hint {
+    font-size: $font-size-sm;
+    color: $text-muted;
+    margin: 0;
+  }
+
+  &.has-error .form-input {
+    border-color: $red;
+    box-shadow: 0 0 0 3px rgba(246, 70, 93, 0.1);
+  }
+}
