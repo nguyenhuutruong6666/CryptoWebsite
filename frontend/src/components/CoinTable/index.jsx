@@ -3,6 +3,7 @@ import { Link } from 'react-router-dom';
 import { useMarket } from '../../store/MarketContext';
 import { getCoinLogo, getCoinColor, getCoinName } from '../../utils/coinHelpers';
 import { formatNumber, formatPrice } from '../../utils/formatters';
+import Pagination from '../Common/Pagination';
 import './CoinTable.scss';
 
 const PRIORITY_COINS = ['BTC', 'ETH', 'USDT', 'BNB', 'XRP', 'USDC', 'SOL', 'ADA', 'DOGE', 'MATIC'];
@@ -62,19 +63,34 @@ export default function CoinTable({ searchQuery = '', activeFilter = 'all', favo
     if (aPri !== -1) return -1;
     if (bPri !== -1) return 1;
 
-    let aVal, bVal;
-    switch (sortBy) {
-      case 'name': return sortOrder === 'asc'
-        ? a.symbol.localeCompare(b.symbol)
-        : b.symbol.localeCompare(a.symbol);
-      case 'price': aVal = a.price; bVal = b.price; break;
-      case 'change': aVal = a.change24h; bVal = b.change24h; break;
-      case 'volume': aVal = a.volume24h; bVal = b.volume24h; break;
-      case 'marketCap': aVal = a.marketCap; bVal = b.marketCap; break;
-      default: return 0;
+    let aVal = a[sortBy];
+    let bVal = b[sortBy];
+
+    if (sortBy === 'change') {
+      aVal = parseFloat(a.priceChangePercent);
+      bVal = parseFloat(b.priceChangePercent);
+    } else if (sortBy === 'volume') {
+      aVal = parseFloat(a.quoteVolume);
+      bVal = parseFloat(b.quoteVolume);
+    } else if (sortBy === 'marketCap') {
+      aVal = parseFloat(a.price) * parseFloat(a.volume);
+      bVal = parseFloat(b.price) * parseFloat(b.volume);
     }
-    return sortOrder === 'asc' ? aVal - bVal : bVal - aVal;
+
+    if (aVal < bVal) return sortOrder === 'asc' ? -1 : 1;
+    if (aVal > bVal) return sortOrder === 'asc' ? 1 : -1;
+    return 0;
   });
+
+  const [currentPage, setCurrentPage] = useState(1);
+  const ITEMS_PER_PAGE = 10;
+  
+  useEffect(() => {
+    setCurrentPage(1); // Reset page on filter changes
+  }, [searchQuery, activeFilter, sortBy, sortOrder]);
+
+  const totalPages = Math.ceil(sortedMarkets.length / ITEMS_PER_PAGE);
+  const currentData = sortedMarkets.slice((currentPage - 1) * ITEMS_PER_PAGE, currentPage * ITEMS_PER_PAGE);
 
   return (
     <div className="coin-table-container">
@@ -111,7 +127,7 @@ export default function CoinTable({ searchQuery = '', activeFilter = 'all', favo
             </tr>
           </thead>
           <tbody>
-            {sortedMarkets.slice(0, 50).map((coin, index) => {
+            {currentData.map((coin, index) => {
               const flashClass = flashingCells.has(`${coin.symbol}-up`)
                 ? 'flash-green'
                 : flashingCells.has(`${coin.symbol}-down`)
@@ -120,7 +136,7 @@ export default function CoinTable({ searchQuery = '', activeFilter = 'all', favo
 
               return (
                 <tr key={coin.symbol} className={`coin-row ${flashClass}`}>
-                  <td className="rank-cell">{index + 1}</td>
+                  <td className="rank-cell">{(currentPage - 1) * ITEMS_PER_PAGE + index + 1}</td>
                   <td className="name-cell">
                     <Link to={`/coin/${coin.symbol.toLowerCase()}`} className="coin-link">
                       <div
@@ -168,6 +184,12 @@ export default function CoinTable({ searchQuery = '', activeFilter = 'all', favo
           </div>
         )}
       </div>
+
+      <Pagination 
+        currentPage={currentPage}
+        totalPages={totalPages}
+        onPageChange={setCurrentPage}
+      />
     </div>
   );
 }

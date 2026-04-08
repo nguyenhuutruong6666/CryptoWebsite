@@ -3,14 +3,18 @@ import { useNavigate } from 'react-router-dom';
 import Navbar from '../../components/Navbar';
 import FormInput from '../../components/Auth/FormInput';
 import { useAuth } from '../../store/AuthContext';
+import { useToast } from '../../store/ToastContext';
+import ConfirmDialog from '../../components/Common/ConfirmDialog';
 import './ProfilePage.scss';
 
 export default function ProfilePage() {
   const { user, isLoading, logout, updateProfile } = useAuth();
   const navigate = useNavigate();
+  const { addToast } = useToast();
   
   const [activeTab, setActiveTab] = useState('overview');
   const [isEditing, setIsEditing] = useState(false);
+  const [showConfirm, setShowConfirm] = useState(false);
   const [form, setForm] = useState({ name: '', email: '', phone: '' });
 
   useEffect(() => {
@@ -41,10 +45,20 @@ export default function ProfilePage() {
 
   const handleChange = (field) => (e) => setForm({ ...form, [field]: e.target.value });
 
-  const handleSave = async (e) => {
+  const handleSaveClick = (e) => {
     e.preventDefault();
-    await updateProfile({ name: form.name, phone: form.phone });
-    setIsEditing(false);
+    setShowConfirm(true);
+  };
+
+  const executeSave = async () => {
+    setShowConfirm(false);
+    const res = await updateProfile({ name: form.name, phone: form.phone });
+    if (res.success) {
+      setIsEditing(false);
+      addToast('Lưu thông tin thành công!', 'success');
+    } else {
+      addToast(res.message || 'Có lỗi xảy ra khi lưu thay đổi.', 'error');
+    }
   };
 
   const handleLogout = () => {
@@ -109,7 +123,7 @@ export default function ProfilePage() {
                     setIsEditing(false);
                     setForm({ name: user.name || '', email: user.email || '', phone: user.phone || '' });
                   }}>Hủy</button>
-                  <button className="btn-save" onClick={handleSave}>Lưu thay đổi</button>
+                  <button className="btn-save" onClick={handleSaveClick}>Lưu thay đổi</button>
                 </div>
               )}
             </div>
@@ -175,6 +189,14 @@ export default function ProfilePage() {
           </div>
         </div>
       </main>
+
+      <ConfirmDialog
+        isOpen={showConfirm}
+        title="Xác nhận lưu thay đổi"
+        message="Thông tin mới sẽ được áp dụng vào tài khoản của bạn. Chắc chắn tiếp tục?"
+        onConfirm={executeSave}
+        onCancel={() => setShowConfirm(false)}
+      />
     </div>
   );
 }

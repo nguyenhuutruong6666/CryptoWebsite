@@ -3,6 +3,7 @@ import { Link, useNavigate } from 'react-router-dom';
 import AuthLayout from '../../components/Auth/AuthLayout';
 import FormInput from '../../components/Auth/FormInput';
 import { useAuth } from '../../store/AuthContext';
+import { useToast } from '../../store/ToastContext';
 import '../LoginPage/LoginPage.scss'; // Reuse styles from LoginPage
 
 const EmailIcon = () => (
@@ -29,6 +30,7 @@ const UserIcon = () => (
 export default function RegisterPage() {
   const navigate = useNavigate();
   const { register } = useAuth();
+  const { addToast } = useToast();
   const [form, setForm] = useState({ name: '', email: '', password: '', confirmPassword: '' });
   const [errors, setErrors] = useState({});
   const [agreeTerms, setAgreeTerms] = useState(false);
@@ -73,9 +75,10 @@ export default function RegisterPage() {
     setIsLoading(false);
     
     if (res.success) {
-      navigate('/profile');
+      addToast('Đăng ký tài khoản thành công', 'success');
+      navigate('/');
     } else {
-      setErrors({ submit: res.message || 'Đăng ký thất bại. Email có thể đã tồn tại.' });
+      addToast(res.message || 'Đăng ký thất bại. Email có thể đã tồn tại.', 'error');
     }
   };
 
@@ -85,7 +88,6 @@ export default function RegisterPage() {
       subtitle="Bắt đầu hành trình giao dịch crypto của bạn ngay hôm nay."
     >
       <form className="login-form" onSubmit={handleSubmit} noValidate>
-        {errors.submit && <div style={{background: 'rgba(246, 70, 93, 0.1)', color: '#F6465D', padding: '10px 14px', borderRadius: '4px', fontSize: '14px', marginBottom: '8px'}}>{errors.submit}</div>}
         <FormInput
           id="register-name"
           label="Họ và tên"

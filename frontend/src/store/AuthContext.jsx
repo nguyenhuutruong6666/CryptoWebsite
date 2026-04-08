@@ -1,5 +1,6 @@
 import { createContext, useContext, useState, useEffect } from 'react';
 import { authService } from '../services/authService';
+import { useToast } from './ToastContext';
 
 const AuthContext = createContext(null);
 
@@ -7,6 +8,7 @@ export function AuthProvider({ children }) {
   const [user, setUser] = useState(null);
   const [isAuthenticated, setIsAuthenticated] = useState(false);
   const [isLoading, setIsLoading] = useState(true);
+  const { addToast } = useToast();
 
   useEffect(() => {
     checkAuth();
@@ -21,10 +23,10 @@ export function AuthProvider({ children }) {
           setUser(response.data);
           setIsAuthenticated(true);
         } else {
-          logout();
+          logoutSilent();
         }
       } catch (error) {
-        logout();
+        logoutSilent();
       }
     }
     setIsLoading(false);
@@ -66,10 +68,15 @@ export function AuthProvider({ children }) {
     }
   };
 
-  const logout = () => {
+  const logoutSilent = () => {
     localStorage.removeItem('token');
     setUser(null);
     setIsAuthenticated(false);
+  }
+
+  const logout = () => {
+    logoutSilent();
+    addToast('Đăng xuất thành công', 'success');
   };
 
   const updateProfile = async (data) => {
