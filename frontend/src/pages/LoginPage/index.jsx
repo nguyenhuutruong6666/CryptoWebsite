@@ -2,6 +2,7 @@ import { useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import AuthLayout from '../../components/Auth/AuthLayout';
 import FormInput from '../../components/Auth/FormInput';
+import { useAuth } from '../../store/AuthContext';
 import './LoginPage.scss';
 
 const EmailIcon = () => (
@@ -20,6 +21,7 @@ const LockIcon = () => (
 
 export default function LoginPage() {
   const navigate = useNavigate();
+  const { login } = useAuth();
   const [form, setForm] = useState({ email: '', password: '' });
   const [errors, setErrors] = useState({});
   const [remember, setRemember] = useState(false);
@@ -28,6 +30,7 @@ export default function LoginPage() {
   const handleChange = (field) => (e) => {
     setForm(prev => ({ ...prev, [field]: e.target.value }));
     if (errors[field]) setErrors(prev => ({ ...prev, [field]: '' }));
+    if (errors.submit) setErrors(prev => ({ ...prev, submit: '' }));
   };
 
   const validate = () => {
@@ -35,7 +38,6 @@ export default function LoginPage() {
     if (!form.email) errs.email = 'Vui lòng nhập email';
     else if (!/\S+@\S+\.\S+/.test(form.email)) errs.email = 'Email không hợp lệ';
     if (!form.password) errs.password = 'Vui lòng nhập mật khẩu';
-    else if (form.password.length < 6) errs.password = 'Mật khẩu ít nhất 6 ký tự';
     return errs;
   };
 
@@ -45,9 +47,14 @@ export default function LoginPage() {
     if (Object.keys(errs).length > 0) { setErrors(errs); return; }
 
     setIsLoading(true);
-    await new Promise(r => setTimeout(r, 1200));
+    const res = await login(form.email, form.password);
     setIsLoading(false);
-    navigate('/profile');
+    
+    if (res.success) {
+      navigate('/profile');
+    } else {
+      setErrors({ submit: res.message || 'Đăng nhập thất bại. Vui lòng thử lại.' });
+    }
   };
 
   return (
@@ -56,6 +63,7 @@ export default function LoginPage() {
       subtitle="Chào mừng trở lại! Nhập thông tin để tiếp tục."
     >
       <form className="login-form" onSubmit={handleSubmit} noValidate>
+        {errors.submit && <div className="auth-error-banner" style={{background: 'rgba(246, 70, 93, 0.1)', color: '#F6465D', padding: '10px 14px', borderRadius: '4px', fontSize: '14px', marginBottom: '8px'}}>{errors.submit}</div>}
         <FormInput
           id="login-email"
           label="Email"

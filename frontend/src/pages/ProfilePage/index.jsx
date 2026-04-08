@@ -1,17 +1,9 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
+import { useNavigate } from 'react-router-dom';
 import Navbar from '../../components/Navbar';
 import FormInput from '../../components/Auth/FormInput';
+import { useAuth } from '../../store/AuthContext';
 import './ProfilePage.scss';
-
-// Mock user data
-const USER_DATA = {
-  id: 'UID-8492749',
-  name: 'Nguyễn Hữu Trường',
-  email: 'truong@example.com',
-  joinDate: '15/08/2025',
-  tier: 'VIP 1',
-  verificationLevel: 'Đã xác minh Plus',
-};
 
 const STATS = [
   { label: 'Tổng tài sản ước tính', value: '$12,450.80', change: '+5.2%', isPositive: true },
@@ -20,16 +12,50 @@ const STATS = [
 ];
 
 export default function ProfilePage() {
+  const { user, isLoading, logout, updateProfile } = useAuth();
+  const navigate = useNavigate();
+  
   const [activeTab, setActiveTab] = useState('overview');
   const [isEditing, setIsEditing] = useState(false);
-  const [form, setForm] = useState({ name: USER_DATA.name, email: USER_DATA.email, phone: '0987654321' });
+  const [form, setForm] = useState({ name: '', email: '', phone: '' });
+
+  useEffect(() => {
+    if (user) {
+      setForm({ 
+        name: user.name || '', 
+        email: user.email || '', 
+        phone: user.phone || '' 
+      });
+    }
+  }, [user]);
+
+  if (isLoading) {
+    return (
+      <div className="profile-page">
+        <Navbar />
+        <main className="profile-main" style={{ justifyContent: 'center', minHeight: '60vh', color: '#fff' }}>
+          Đang tải dữ liệu người dùng...
+        </main>
+      </div>
+    );
+  }
+
+  if (!user) {
+    navigate('/login');
+    return null;
+  }
 
   const handleChange = (field) => (e) => setForm({ ...form, [field]: e.target.value });
 
-  const handleSave = (e) => {
+  const handleSave = async (e) => {
     e.preventDefault();
+    await updateProfile({ name: form.name, phone: form.phone });
     setIsEditing(false);
-    // TODO: Call API to save profile
+  };
+
+  const handleLogout = () => {
+    logout();
+    navigate('/');
   };
 
   return (
@@ -42,12 +68,12 @@ export default function ProfilePage() {
           <div className="user-brief">
             <div className="avatar-wrapper">
               <div className="avatar">
-                {USER_DATA.name.charAt(0)}
+                {user.name ? user.name.charAt(0).toUpperCase() : 'U'}
               </div>
-              <span className="tier-badge">{USER_DATA.tier}</span>
+              <span className="tier-badge">{user.tier || 'Thành viên'}</span>
             </div>
-            <h2 className="user-name">{USER_DATA.name}</h2>
-            <p className="user-id">ID: {USER_DATA.id}</p>
+            <h2 className="user-name">{user.name}</h2>
+            <p className="user-id">ID: {user.id.substring(0, 8).toUpperCase()}</p>
           </div>
 
           <nav className="profile-nav">
@@ -75,7 +101,7 @@ export default function ProfilePage() {
         <div className="profile-content">
           <div className="content-header">
             <h1 className="content-title">Quản lý tài khoản</h1>
-            <button className="btn-logout">Đăng xuất</button>
+            <button className="btn-logout" onClick={handleLogout}>Đăng xuất</button>
           </div>
 
           <div className="stats-grid">
@@ -99,7 +125,10 @@ export default function ProfilePage() {
                 <button className="btn-edit" onClick={() => setIsEditing(true)}>Chỉnh sửa</button>
               ) : (
                 <div className="edit-actions">
-                  <button className="btn-cancel" onClick={() => setIsEditing(false)}>Hủy</button>
+                  <button className="btn-cancel" onClick={() => {
+                    setIsEditing(false);
+                    setForm({ name: user.name || '', email: user.email || '', phone: user.phone || '' });
+                  }}>Hủy</button>
                   <button className="btn-save" onClick={handleSave}>Lưu thay đổi</button>
                 </div>
               )}
@@ -116,7 +145,8 @@ export default function ProfilePage() {
                 label="Địa chỉ Email"
                 value={form.email}
                 onChange={handleChange('email')}
-                disabled={!isEditing}
+                disabled={true} 
+                hint="Không thể thay đổi email."
               />
               <FormInput
                 label="Số điện thoại"
@@ -131,7 +161,7 @@ export default function ProfilePage() {
                     <path d="M22 11.08V12a10 10 0 1 1-5.93-9.14" />
                     <polyline points="22 4 12 14.01 9 11.01" />
                   </svg>
-                  <span style={{ color: '#0ECB81', fontWeight: 500 }}>{USER_DATA.verificationLevel}</span>
+                  <span style={{ color: '#0ECB81', fontWeight: 500 }}>{user.verificationLevel || 'Đã xác minh cơ bản'}</span>
                 </div>
               </div>
             </form>
@@ -144,9 +174,8 @@ export default function ProfilePage() {
             
             <div className="activity-list">
               {[
-                { action: 'Đăng nhập thành công', device: 'Chrome on Windows', ip: '192.168.1.1', time: '10 phút trước' },
-                { action: 'Rút tiền', device: '0.15 BTC', ip: 'Ví: 1A1zP1eP5QGefi2DMPTfTL5SLmv7DivfNa', time: '2 ngày trước' },
-                { action: 'Giao dịch Spot', device: 'Mua 1.5 ETH / USDT', ip: 'Khớp lệnh: Hoàn tất', time: '3 ngày trước' },
+                { action: 'Đăng nhập hệ thống (Lần cuối)', device: 'Chrome on Windows', ip: '127.0.0.1', time: 'Vừa xong' },
+                { action: 'Đăng ký tài khoản', device: 'Web App TCrypto', ip: 'System', time: new Date(user.createdAt || Date.now()).toLocaleDateString('vi-VN') },
               ].map((item, i) => (
                 <div key={i} className="activity-item">
                   <div className="activity-icon">

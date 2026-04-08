@@ -29,9 +29,12 @@ const io = new Server(server, {
   }
 });
 
+const authRoutes = require('./src/routes/authRoutes');
+
 initializeWebSocket(io);
 
 app.use('/api/markets', marketRoutes);
+app.use('/api/auth', authRoutes);
 
 app.get('/health', (req, res) => {
   res.json({

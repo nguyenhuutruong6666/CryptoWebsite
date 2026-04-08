@@ -2,6 +2,7 @@ import { useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import AuthLayout from '../../components/Auth/AuthLayout';
 import FormInput from '../../components/Auth/FormInput';
+import { useAuth } from '../../store/AuthContext';
 import '../LoginPage/LoginPage.scss'; // Reuse styles from LoginPage
 
 const EmailIcon = () => (
@@ -27,6 +28,7 @@ const UserIcon = () => (
 
 export default function RegisterPage() {
   const navigate = useNavigate();
+  const { register } = useAuth();
   const [form, setForm] = useState({ name: '', email: '', password: '', confirmPassword: '' });
   const [errors, setErrors] = useState({});
   const [agreeTerms, setAgreeTerms] = useState(false);
@@ -35,6 +37,7 @@ export default function RegisterPage() {
   const handleChange = (field) => (e) => {
     setForm(prev => ({ ...prev, [field]: e.target.value }));
     if (errors[field]) setErrors(prev => ({ ...prev, [field]: '' }));
+    if (errors.submit) setErrors(prev => ({ ...prev, submit: '' }));
   };
 
   const validate = () => {
@@ -44,7 +47,7 @@ export default function RegisterPage() {
     else if (!/\S+@\S+\.\S+/.test(form.email)) errs.email = 'Email không hợp lệ';
     
     if (!form.password) errs.password = 'Vui lòng nhập mật khẩu';
-    else if (form.password.length < 8) errs.password = 'Mật khẩu ít nhất 8 ký tự';
+    else if (form.password.length < 6) errs.password = 'Mật khẩu ít nhất 6 ký tự';
     
     if (form.password !== form.confirmPassword) {
       errs.confirmPassword = 'Mật khẩu xác nhận không khớp';
@@ -66,10 +69,14 @@ export default function RegisterPage() {
     }
 
     setIsLoading(true);
-    // Giả lập API call
-    await new Promise(r => setTimeout(r, 1500));
+    const res = await register(form.name, form.email, form.password);
     setIsLoading(false);
-    navigate('/login');
+    
+    if (res.success) {
+      navigate('/profile');
+    } else {
+      setErrors({ submit: res.message || 'Đăng ký thất bại. Email có thể đã tồn tại.' });
+    }
   };
 
   return (
@@ -78,6 +85,7 @@ export default function RegisterPage() {
       subtitle="Bắt đầu hành trình giao dịch crypto của bạn ngay hôm nay."
     >
       <form className="login-form" onSubmit={handleSubmit} noValidate>
+        {errors.submit && <div style={{background: 'rgba(246, 70, 93, 0.1)', color: '#F6465D', padding: '10px 14px', borderRadius: '4px', fontSize: '14px', marginBottom: '8px'}}>{errors.submit}</div>}
         <FormInput
           id="register-name"
           label="Họ và tên"
