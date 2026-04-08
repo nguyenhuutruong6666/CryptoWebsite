@@ -1,38 +1,47 @@
 import { useMemo } from 'react';
 import { useMarket } from '../../store/MarketContext';
+import { getCoinLogo, getCoinColor } from '../../utils/coinHelpers';
 import './MarketOverview.scss';
 
-const COIN_ICONS = {
-  BNB: '🟡', BTC: '🟠', ETH: '🔵', USDC: '🔵',
-  USDT: '🟢', SOL: '🟣', ADA: '🔵', XRP: '⚪', DOGE: '🐕',
-};
-
-function getCoinIcon(symbol) {
-  return COIN_ICONS[symbol] || '💰';
-}
-
 function formatPrice(price) {
+  // Fix format string cho giá trị nhỏ
+  if (price < 0.01) {
+    return `$${price.toLocaleString('en-US', { minimumFractionDigits: 4, maximumFractionDigits: 6 })}`;
+  }
   return `$${price.toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}`;
 }
 
-function CategoryCard({ title, coins, showIcons = false }) {
+function CategoryCard({ title, coins }) {
   return (
     <div className="overview-card">
       <h3 className="overview-card-title">{title}</h3>
       <div className="overview-coin-list">
         {coins.slice(0, 3).map((coin) => (
           <div key={coin.symbol} className="overview-coin-item">
-            <div className="overview-coin-info">
-              {showIcons && (
-                <span className="overview-coin-icon">{getCoinIcon(coin.symbol)}</span>
-              )}
+            <div className="overview-coin-info" style={{ display: 'flex', alignItems: 'center' }}>
+              <span className="overview-coin-icon-img" style={{
+                borderRadius: '16px',
+                width: '24px',
+                height: '24px',
+                display: 'flex',
+                alignItems: 'center',
+                justifyContent: 'center',
+                backgroundColor: getCoinColor(coin.symbol) + '20',
+                border: `1px solid ${getCoinColor(coin.symbol)}40`,
+                marginRight: '12px',
+                overflow: 'hidden'
+              }}>
+                <img 
+                  src={getCoinLogo(coin.symbol)} 
+                  alt={coin.symbol} 
+                  style={{ width: '16px', height: '16px', objectFit: 'contain' }}
+                  onError={e => { e.target.style.display = 'none'; }}
+                />
+              </span>
               <div className="overview-coin-details">
                 <span className="overview-coin-symbol">{coin.symbol}</span>
                 <span className="overview-coin-price">
-                  {showIcons
-                    ? formatPrice(coin.price)
-                    : `$${coin.price.toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 8 })}`
-                  }
+                  {formatPrice(coin.price)}
                 </span>
               </div>
             </div>
@@ -63,12 +72,12 @@ export default function MarketOverview() {
   }, [markets]);
 
   const newListings = useMemo(() => {
-    return markets.slice(20, 23);
+    return markets.slice(10, 13); // lấy giả lập vài token index ngẫu nhiên làm danh sách niêm yết mới
   }, [markets]);
 
   return (
     <div className="market-overview">
-      <CategoryCard title="Phổ biến" coins={popular} showIcons />
+      <CategoryCard title="Phổ biến" coins={popular} />
       <CategoryCard title="Niêm yết mới" coins={newListings} />
       <CategoryCard title="Top tăng giá" coins={gainers} />
       <CategoryCard title="Top khối lượng" coins={volume} />

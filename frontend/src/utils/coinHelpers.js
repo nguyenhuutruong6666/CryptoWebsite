@@ -49,14 +49,22 @@ const names = {
   SUI: 'Sui', ARB: 'Arbitrum', OP: 'Optimism', INJ: 'Injective',
 };
 
+const getBaseSymbol = (symbol) => {
+  if (!symbol) return '';
+  return symbol.replace(/USDT$|BUSD$|USDC$/, '');
+};
+
 export function getCoinLogo(symbol) {
-  return logos[symbol] || 'https://assets.coingecko.com/coins/images/1/small/bitcoin.png';
+  const base = getBaseSymbol(symbol);
+  return logos[base] || `https://assets.coincap.io/assets/icons/${base.toLowerCase()}@2x.png`;
 }
 
 export function getCoinColor(symbol) {
-  return colors[symbol] || '#F3BA2F';
+  const base = getBaseSymbol(symbol);
+  return colors[base] || '#888888';
 }
 
 export function getCoinName(symbol) {
-  return names[symbol] || symbol;
+  const base = getBaseSymbol(symbol);
+  return names[base] || base;
 }
