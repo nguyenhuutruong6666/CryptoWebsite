@@ -19,11 +19,18 @@ exports.register = async (req, res) => {
     const salt = await bcrypt.genSalt(10);
     const hashedPassword = await bcrypt.hash(password, salt);
 
+    // Lấy Role USER mặc định cho người dùng đăng ký mới
+    let defaultRole = await prisma.role.findUnique({ where: { name: 'USER' } });
+    if (!defaultRole) {
+      defaultRole = await prisma.role.create({ data: { name: 'USER' }});
+    }
+
     const user = await prisma.user.create({
       data: {
         name,
         email,
         password: hashedPassword,
+        roleId: defaultRole.id,
       },
     });
 
@@ -44,7 +51,11 @@ exports.login = async (req, res) => {
   try {
     const { email, password } = req.body;
 
-    const user = await prisma.user.findUnique({ where: { email } });
+    const user = await prisma.user.findUnique({ 
+      where: { email },
+      include: { role: true } 
+    });
+    
     if (!user) {
       return res.status(404).json({ success: false, message: 'Không tìm thấy người dùng này.' });
     }
@@ -62,6 +73,7 @@ exports.login = async (req, res) => {
         id: user.id,
         name: user.name,
         email: user.email,
+        role: user.role.name,
         tier: user.tier,
         verificationLevel: user.verificationLevel,
         token,
@@ -86,6 +98,7 @@ exports.getProfile = async (req, res) => {
         tier: true,
         verificationLevel: true,
         createdAt: true,
+        role: { select: { name: true } }
       },
     });
 
@@ -117,6 +130,7 @@ exports.updateProfile = async (req, res) => {
         phone: true,
         tier: true,
         verificationLevel: true,
+        role: { select: { name: true } }
       },
     });
 

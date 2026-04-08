@@ -7,14 +7,25 @@ datasource db {
   url      = env("DATABASE_URL")
 }
 
+model Role {
+  id        String   @id @default(uuid())
+  name      String   @unique // "ADMIN", "USER"
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  users     User[]
+}
+
 model User {
-  id                String   @id @default(uuid())
+  id                String    @id @default(uuid())
+  roleId            String
+  role              Role      @relation(fields: [roleId], references: [id])
   name              String
-  email             String   @unique
+  email             String    @unique
   password          String
   phone             String?
-  tier              String   @default("Thành viên")
-  verificationLevel String   @default("Chưa xác minh")
-  createdAt         DateTime @default(now())
-  updatedAt         DateTime @updatedAt
+  tier              String    @default("Thành viên")
+  verificationLevel String    @default("Chưa xác minh")
+  createdAt         DateTime  @default(now())
+  updatedAt         DateTime  @updatedAt
 }

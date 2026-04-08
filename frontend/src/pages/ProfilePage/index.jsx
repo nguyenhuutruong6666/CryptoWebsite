@@ -5,12 +5,6 @@ import FormInput from '../../components/Auth/FormInput';
 import { useAuth } from '../../store/AuthContext';
 import './ProfilePage.scss';
 
-const STATS = [
-  { label: 'Tổng tài sản ước tính', value: '$12,450.80', change: '+5.2%', isPositive: true },
-  { label: 'Lãi/Lỗ 30 ngày', value: '+$640.25', change: '+12.4%', isPositive: true },
-  { label: 'Giao dịch trong tháng', value: '142', change: '-12', isPositive: false },
-];
-
 export default function ProfilePage() {
   const { user, isLoading, logout, updateProfile } = useAuth();
   const navigate = useNavigate();
@@ -102,20 +96,6 @@ export default function ProfilePage() {
           <div className="content-header">
             <h1 className="content-title">Quản lý tài khoản</h1>
             <button className="btn-logout" onClick={handleLogout}>Đăng xuất</button>
-          </div>
-
-          <div className="stats-grid">
-            {STATS.map(stat => (
-              <div key={stat.label} className="stat-card">
-                <p className="stat-label">{stat.label}</p>
-                <div className="stat-value-row">
-                  <h3 className="stat-value">{stat.value}</h3>
-                  <span className={`stat-change ${stat.isPositive ? 'positive' : 'negative'}`}>
-                    {stat.change}
-                  </span>
-                </div>
-              </div>
-            ))}
           </div>
 
           <div className="info-section">
