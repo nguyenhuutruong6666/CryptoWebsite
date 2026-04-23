@@ -5,6 +5,7 @@ import FormInput from '../../components/Auth/FormInput/FormInput';
 import { useAuth } from '../../store/AuthContext';
 import { useToast } from '../../store/ToastContext';
 import ConfirmDialog from '../../components/Common/ConfirmDialog';
+import Pagination from '../../components/Common/Pagination';
 import Footer from '../../components/Footer/Footer';
 import { adminService } from '../../services/adminService';
 import './ProfilePage.scss';
@@ -25,6 +26,9 @@ export default function ProfilePage() {
   const [viewingUser, setViewingUser] = useState(null); // Cho Modal xem chi tiết
   const [showDeleteConfirm, setShowDeleteConfirm] = useState(false);
   const [userToDelete, setUserToDelete] = useState(null);
+  
+  const [adminSearchQuery, setAdminSearchQuery] = useState('');
+  const [adminCurrentPage, setAdminCurrentPage] = useState(1);
 
   useEffect(() => {
     if (user) {
@@ -52,6 +56,24 @@ export default function ProfilePage() {
     }
     setIsFetchingUsers(false);
   };
+
+  const filteredUsers = users.filter(u => {
+    const nameStr = u.name || '';
+    const emailStr = u.email || '';
+    const query = adminSearchQuery ? adminSearchQuery.toLowerCase() : '';
+    return nameStr.toLowerCase().includes(query) || emailStr.toLowerCase().includes(query);
+  });
+
+  const ITEMS_PER_PAGE = 10;
+  const totalAdminPages = Math.ceil(filteredUsers.length / ITEMS_PER_PAGE);
+  const currentUsers = filteredUsers.slice(
+    (adminCurrentPage - 1) * ITEMS_PER_PAGE,
+    adminCurrentPage * ITEMS_PER_PAGE
+  );
+
+  useEffect(() => {
+    setAdminCurrentPage(1);
+  }, [adminSearchQuery]);
 
   if (isLoading) {
     return (
@@ -243,8 +265,25 @@ export default function ProfilePage() {
           {activeTab === 'system_accounts' && user?.role === 'ADMIN' && (
             <div className="info-section">
               <div className="section-header">
-                <h2>Quản lý người dùng hệ thống</h2>
-                <span className="user-count">Tổng cộng: {users.length} tài khoản</span>
+                <div className="header-left">
+                  <h2>Quản lý người dùng hệ thống</h2>
+                  <span className="user-count">Tổng cộng: {filteredUsers.length} tài khoản</span>
+                </div>
+                <div className="header-right">
+                  <div className="admin-search-box">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={2}>
+                      <circle cx="11" cy="11" r="8" />
+                      <path d="m21 21-4.35-4.35" />
+                    </svg>
+                    <input 
+                      type="text" 
+                      placeholder="Tìm kiếm người dùng..." 
+                      value={adminSearchQuery}
+                      onChange={e => setAdminSearchQuery(e.target.value)}
+                      className="admin-search-input"
+                    />
+                  </div>
+                </div>
               </div>
               
               <div className="admin-table-container">
@@ -263,14 +302,14 @@ export default function ProfilePage() {
                       </tr>
                     </thead>
                     <tbody>
-                      {users.length === 0 ? (
+                      {currentUsers.length === 0 ? (
                         <tr>
                           <td colSpan="6" style={{ textAlign: 'center', padding: '20px' }}>Không có dữ liệu</td>
                         </tr>
                       ) : (
-                        users.map((u, index) => (
+                        currentUsers.map((u, index) => (
                           <tr key={u.id}>
-                            <td>{index + 1}</td>
+                            <td>{(adminCurrentPage - 1) * ITEMS_PER_PAGE + index + 1}</td>
                             <td className="fw-500">{u.name}</td>
                             <td>{u.email}</td>
                             <td>
@@ -299,6 +338,16 @@ export default function ProfilePage() {
                   </table>
                 )}
               </div>
+
+              {filteredUsers.length > 0 && !isFetchingUsers && (
+                <div className="admin-pagination">
+                  <Pagination 
+                    currentPage={adminCurrentPage} 
+                    totalPages={totalAdminPages} 
+                    onPageChange={setAdminCurrentPage} 
+                  />
+                </div>
+              )}
             </div>
           )}
         </div>

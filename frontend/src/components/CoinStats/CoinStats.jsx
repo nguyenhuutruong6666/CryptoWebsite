@@ -1,7 +1,6 @@
 import { formatNumber, formatCompactNumber, formatPrice, formatPercent } from '../../utils/formatters';
 import './CoinStats.scss';
 
-// Hàm mock dữ liệu tĩnh mang tính cố định (deterministic) dựa trên symbol
 const getMockData = (symbol, currentPrice) => {
   let seed = 0;
   for (let i = 0; i < symbol.length; i++) seed += symbol.charCodeAt(i);

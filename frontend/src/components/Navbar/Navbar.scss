@@ -80,36 +80,6 @@
   align-items: center;
   gap: $spacing-md;
 
-  .search-box {
-    display: flex;
-    align-items: center;
-    background-color: $bg-primary;
-    border: 1px solid $border-color;
-    border-radius: $border-radius-sm;
-    padding: 7px 12px;
-    gap: $spacing-sm;
-    transition: border-color $transition-base;
-
-    &:focus-within { border-color: $yellow; }
-
-    .search-icon {
-      color: $text-secondary;
-      width: 15px;
-      height: 15px;
-      flex-shrink: 0;
-    }
-
-    .search-input {
-      background: transparent;
-      border: none;
-      outline: none;
-      color: $text-primary;
-      font-size: $font-size-base;
-      width: 180px;
-      &::placeholder { color: $text-secondary; }
-    }
-  }
-
   .auth-buttons {
     display: flex;
     align-items: center;
@@ -157,7 +127,6 @@
 
 @media (max-width: 768px) {
   .navbar-links { display: none; }
-  .search-box { display: none; }
   .auth-buttons { gap: 4px;
     .btn-login { display: none; }
   }
