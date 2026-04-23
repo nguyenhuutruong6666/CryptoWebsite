@@ -8,6 +8,7 @@ import LoginPage from './pages/LoginPage/LoginPage';
 import RegisterPage from './pages/RegisterPage/RegisterPage';
 import ProfilePage from './pages/ProfilePage/ProfilePage';
 import FavoritesPage from './pages/FavoritesPage/FavoritesPage';
+import ForgotPasswordPage from './pages/ForgotPasswordPage/ForgotPasswordPage';
 
 function App() {
   return (
@@ -22,6 +23,7 @@ function App() {
               <Route path="/register" element={<RegisterPage />} />
               <Route path="/profile" element={<ProfilePage />} />
               <Route path="/favorites" element={<FavoritesPage />} />
+              <Route path="/forgot-password" element={<ForgotPasswordPage />} />
               <Route path="*" element={<HomePage />} />
             </Routes>
           </MarketProvider>

@@ -1,6 +1,7 @@
 const bcrypt = require('bcryptjs');
 const jwt = require('jsonwebtoken');
 const prisma = require('../models/prismaClient');
+const { sendOTP } = require('../utils/emailService');
 
 const generateToken = (userId) => {
   return jwt.sign({ id: userId }, process.env.JWT_SECRET, { expiresIn: '7d' });
@@ -146,6 +147,83 @@ exports.updateProfile = async (req, res) => {
 
     res.json({ success: true, data: formattedUser, message: 'Cập nhật thành công' });
   } catch (error) {
+    res.status(500).json({ success: false, message: error.message });
+  }
+};
+
+// Quên mật khẩu - Gửi OTP
+exports.forgotPassword = async (req, res) => {
+  try {
+    const { email } = req.body;
+    const user = await prisma.user.findUnique({ where: { email } });
+    
+    if (!user) {
+      return res.status(404).json({ success: false, message: 'Email không tồn tại trên hệ thống.' });
+    }
+
+    // Tạo mã OTP 6 chữ số
+    const otp = Math.floor(100000 + Math.random() * 900000).toString();
+    const expires = new Date(Date.now() + 10 * 60 * 1000); // Hết hạn sau 10 phút
+
+    await prisma.user.update({
+      where: { email },
+      data: {
+        resetPasswordToken: otp,
+        resetPasswordExpires: expires
+      }
+    });
+
+    await sendOTP(email, otp);
+
+    res.json({ success: true, message: 'Mã xác minh đã được gửi đến email của bạn.' });
+  } catch (error) {
+    console.error('Forgot Password Error:', error);
+    res.status(500).json({ success: false, message: error.message });
+  }
+};
+
+// Xác minh OTP
+exports.verifyOTP = async (req, res) => {
+  try {
+    const { email, otp } = req.body;
+    const user = await prisma.user.findUnique({ where: { email } });
+
+    if (!user || user.resetPasswordToken !== otp || (user.resetPasswordExpires && new Date() > new Date(user.resetPasswordExpires))) {
+      return res.status(400).json({ success: false, message: 'Mã xác minh không hợp lệ hoặc đã hết hạn.' });
+    }
+
+    res.json({ success: true, message: 'Mã xác minh chính xác.' });
+  } catch (error) {
+    console.error('Verify OTP Error:', error);
+    res.status(500).json({ success: false, message: error.message });
+  }
+};
+
+// Đặt lại mật khẩu mới
+exports.resetPassword = async (req, res) => {
+  try {
+    const { email, otp, newPassword } = req.body;
+    const user = await prisma.user.findUnique({ where: { email } });
+
+    if (!user || user.resetPasswordToken !== otp || (user.resetPasswordExpires && new Date() > new Date(user.resetPasswordExpires))) {
+      return res.status(400).json({ success: false, message: 'Yêu cầu không hợp lệ hoặc đã hết hạn.' });
+    }
+
+    const salt = await bcrypt.genSalt(10);
+    const hashedPassword = await bcrypt.hash(newPassword, salt);
+
+    await prisma.user.update({
+      where: { email },
+      data: {
+        password: hashedPassword,
+        resetPasswordToken: null,
+        resetPasswordExpires: null
+      }
+    });
+
+    res.json({ success: true, message: 'Mật khẩu đã được đặt lại thành công.' });
+  } catch (error) {
+    console.error('Reset Password Error:', error);
     res.status(500).json({ success: false, message: error.message });
   }
 };
