@@ -1,6 +1,6 @@
 import { useState } from 'react';
-import Navbar from '../../components/Navbar';
-import CoinTable from '../../components/CoinTable';
+import Navbar from '../../components/Navbar/Navbar';
+import CoinTable from '../../components/CoinTable/CoinTable';
 import './FavoritesPage.scss';
 
 // Mock danh sách coin yêu thích

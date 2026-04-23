@@ -1,7 +1,7 @@
 import { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
-import Navbar from '../../components/Navbar';
-import FormInput from '../../components/Auth/FormInput';
+import Navbar from '../../components/Navbar/Navbar';
+import FormInput from '../../components/Auth/FormInput/FormInput';
 import { useAuth } from '../../store/AuthContext';
 import { useToast } from '../../store/ToastContext';
 import ConfirmDialog from '../../components/Common/ConfirmDialog';

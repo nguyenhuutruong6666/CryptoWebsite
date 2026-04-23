@@ -2,12 +2,12 @@ import { BrowserRouter, Routes, Route } from 'react-router-dom';
 import { AuthProvider } from './store/AuthContext';
 import { MarketProvider } from './store/MarketContext';
 import { ToastProvider } from './store/ToastContext';
-import HomePage from './pages/HomePage';
-import CoinDetailPage from './pages/CoinDetailPage';
-import LoginPage from './pages/LoginPage';
-import RegisterPage from './pages/RegisterPage';
-import ProfilePage from './pages/ProfilePage';
-import FavoritesPage from './pages/FavoritesPage';
+import HomePage from './pages/HomePage/HomePage';
+import CoinDetailPage from './pages/CoinDetailPage/CoinDetailPage';
+import LoginPage from './pages/LoginPage/LoginPage';
+import RegisterPage from './pages/RegisterPage/RegisterPage';
+import ProfilePage from './pages/ProfilePage/ProfilePage';
+import FavoritesPage from './pages/FavoritesPage/FavoritesPage';
 
 function App() {
   return (

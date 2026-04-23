@@ -1,8 +1,8 @@
 import { useState } from 'react';
-import Navbar from '../../components/Navbar';
-import MarketOverview from '../../components/MarketOverview';
-import FilterTabs from '../../components/FilterTabs';
-import CoinTable from '../../components/CoinTable';
+import Navbar from '../../components/Navbar/Navbar';
+import MarketOverview from '../../components/MarketOverview/MarketOverview';
+import FilterTabs from '../../components/FilterTabs/FilterTabs';
+import CoinTable from '../../components/CoinTable/CoinTable';
 import './HomePage.scss';
 
 export default function HomePage() {

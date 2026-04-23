@@ -1,7 +1,7 @@
 import { useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
-import AuthLayout from '../../components/Auth/AuthLayout';
-import FormInput from '../../components/Auth/FormInput';
+import AuthLayout from '../../components/Auth/AuthLayout/AuthLayout';
+import FormInput from '../../components/Auth/FormInput/FormInput';
 import { useAuth } from '../../store/AuthContext';
 import { useToast } from '../../store/ToastContext';
 import './LoginPage.scss';
