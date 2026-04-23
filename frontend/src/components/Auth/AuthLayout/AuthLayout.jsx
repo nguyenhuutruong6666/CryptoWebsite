@@ -13,7 +13,7 @@ export default function AuthLayout({ children, title, subtitle }) {
       <div className="auth-brand-panel">
         <div className="auth-brand-inner">
           <Link to="/" className="auth-brand-logo">
-            <span className="auth-logo-icon">₿</span>
+            <img src="/logoT.png" alt="TCrypto Logo" className="logo-img" />
             <span className="auth-logo-text">TCrypto</span>
           </Link>
 

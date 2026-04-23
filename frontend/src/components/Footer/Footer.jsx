@@ -7,7 +7,10 @@ export default function Footer() {
       <div className="footer-container">
         <div className="footer-grid">
           <div className="footer-brand">
-            <Link to="/" className="brand-logo">TCrypto</Link>
+            <Link to="/" className="brand-logo">
+              <img src="/logoT.png" alt="TCrypto Logo" className="logo-img" />
+              <span>TCrypto</span>
+            </Link>
             <p className="brand-desc">
               Nền tảng giao dịch tiền điện tử hàng đầu, cung cấp dữ liệu thị trường theo thời gian thực và trải nghiệm đầu tư an toàn, minh bạch.
             </p>

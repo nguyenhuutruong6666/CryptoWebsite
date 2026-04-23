@@ -13,7 +13,7 @@ export default function Navbar({ onSearch }) {
     <nav className="navbar">
       <div className="navbar-container">
         <Link to="/" className="navbar-logo">
-          <span className="logo-icon">₿</span>
+          <img src="/logoT.png" alt="TCrypto Logo" className="logo-img" />
           <span className="logo-text">TCrypto</span>
         </Link>
 

@@ -28,15 +28,16 @@
 
   &:hover { opacity: 0.85; }
 
-  .logo-icon {
-    font-size: 20px;
-    color: $yellow;
+  .logo-img {
+    width: 32px;
+    height: 32px;
+    object-fit: contain;
   }
 
   .logo-text {
     font-size: 22px;
     font-weight: 700;
-    color: $yellow;
+    color: $text-primary;
     letter-spacing: -0.5px;
   }
 }

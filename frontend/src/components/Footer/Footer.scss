@@ -26,10 +26,20 @@
   gap: $spacing-md;
 
   .brand-logo {
+    display: flex;
+    align-items: center;
+    gap: 10px;
     font-size: 24px;
     font-weight: 700;
-    color: $yellow;
+    color: $text-primary;
     text-decoration: none;
+    margin-bottom: $spacing-md;
+
+    .logo-img {
+      width: 36px;
+      height: 36px;
+      object-fit: contain;
+    }
   }
 
   .brand-desc {
