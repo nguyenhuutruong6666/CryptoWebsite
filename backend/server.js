@@ -31,12 +31,14 @@ const io = new Server(server, {
 
 const authRoutes     = require('./src/routes/authRoutes');
 const favoriteRoutes = require('./src/routes/favoriteRoutes');
+const adminRoutes    = require('./src/routes/adminRoutes');
 
 initializeWebSocket(io);
 
 app.use('/api/markets',   marketRoutes);
 app.use('/api/auth',      authRoutes);
 app.use('/api/favorites', favoriteRoutes);
+app.use('/api/admin',     adminRoutes);
 
 app.get('/health', (req, res) => {
   res.json({

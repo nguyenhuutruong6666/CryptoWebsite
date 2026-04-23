@@ -106,7 +106,12 @@ exports.getProfile = async (req, res) => {
       return res.status(404).json({ success: false, message: 'Không tìm thấy người dùng.' });
     }
 
-    res.json({ success: true, data: user });
+    const formattedUser = {
+      ...user,
+      role: user.role?.name || 'USER'
+    };
+
+    res.json({ success: true, data: formattedUser });
   } catch (error) {
     res.status(500).json({ success: false, message: error.message });
   }
@@ -134,7 +139,12 @@ exports.updateProfile = async (req, res) => {
       },
     });
 
-    res.json({ success: true, data: user, message: 'Cập nhật thành công' });
+    const formattedUser = {
+      ...user,
+      role: user.role?.name || 'USER'
+    };
+
+    res.json({ success: true, data: formattedUser, message: 'Cập nhật thành công' });
   } catch (error) {
     res.status(500).json({ success: false, message: error.message });
   }

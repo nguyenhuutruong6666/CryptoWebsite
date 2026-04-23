@@ -358,7 +358,220 @@
   }
 
   .activity-time {
-    font-size: $font-size-sm;
-    color: $text-secondary;
+    font-size: 13px;
+    color: #5E6875;
+    white-space: nowrap;
   }
+}
+
+/* =========================================================================
+   Admin System Accounts Styles
+   ========================================================================= */
+.user-count {
+  font-size: 14px;
+  color: $text-secondary;
+  font-weight: normal;
+  margin-left: 16px;
+}
+
+.admin-table-container {
+  overflow-x: auto;
+  border: 1px solid $border-color;
+  border-radius: 8px;
+  background-color: $bg-primary;
+
+  .admin-table {
+    width: 100%;
+    border-collapse: collapse;
+    min-width: 700px;
+    font-size: 14px;
+
+    th, td {
+      padding: 16px;
+      text-align: left;
+      border-bottom: 1px solid $border-color;
+    }
+
+    th {
+      background-color: rgba(255,255,255,0.02);
+      color: $text-secondary;
+      font-weight: 500;
+      white-space: nowrap;
+    }
+
+    td {
+      color: $text-primary;
+    }
+
+    tr:last-child td {
+      border-bottom: none;
+    }
+
+    tr:hover td {
+      background-color: rgba(255,255,255,0.02);
+    }
+  }
+
+  .fw-500 {
+    font-weight: 500;
+  }
+}
+
+.role-badge {
+  display: inline-block;
+  padding: 4px 8px;
+  border-radius: 4px;
+  font-size: 12px;
+  font-weight: 600;
+
+  &.admin {
+    background-color: rgba($yellow, 0.15);
+    color: $yellow;
+    border: 1px solid rgba($yellow, 0.3);
+  }
+
+  &.user {
+    background-color: rgba($text-secondary, 0.15);
+    color: $text-secondary;
+    border: 1px solid rgba($text-secondary, 0.3);
+  }
+}
+
+.action-cells {
+  display: flex;
+  justify-content: center;
+  gap: 8px;
+
+  .btn-icon {
+    background: none;
+    border: none;
+    padding: 6px;
+    border-radius: 4px;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: all 0.2s;
+
+    svg {
+      width: 18px;
+      height: 18px;
+    }
+
+    &:disabled {
+      opacity: 0.3;
+      cursor: not-allowed;
+    }
+
+    &.btn-view {
+      color: $text-secondary;
+      &:hover:not(:disabled) {
+        color: $text-primary;
+        background-color: rgba(255,255,255,0.1);
+      }
+    }
+
+    &.btn-delete {
+      color: $red;
+      &:hover:not(:disabled) {
+        color: #fff;
+        background-color: $red;
+      }
+    }
+  }
+}
+
+/* =========================================================================
+   Modal Chi Tiết Người Dùng
+   ========================================================================= */
+.modal-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  background-color: rgba(0, 0, 0, 0.75);
+  backdrop-filter: blur(4px);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 1000;
+  animation: fadeIn 0.2s ease-out;
+}
+
+.user-detail-modal {
+  width: 100%;
+  max-width: 500px;
+  background-color: $bg-secondary;
+  border-radius: 12px;
+  border: 1px solid $border-color;
+  box-shadow: 0 10px 40px rgba(0,0,0,0.5);
+  padding: 0;
+  overflow: hidden;
+
+  .modal-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 20px 24px;
+    border-bottom: 1px solid $border-color;
+    background-color: rgba(255,255,255,0.02);
+
+    h3 {
+      margin: 0;
+      font-size: 18px;
+      font-weight: 600;
+      color: $text-primary;
+    }
+
+    .btn-close {
+      background: none;
+      border: none;
+      color: $text-secondary;
+      font-size: 20px;
+      cursor: pointer;
+      padding: 0;
+      line-height: 1;
+
+      &:hover {
+        color: $text-primary;
+      }
+    }
+  }
+
+  .modal-body {
+    padding: 24px;
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+
+    .detail-row {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding-bottom: 12px;
+      border-bottom: 1px dashed $border-color;
+
+      &:last-child {
+        border-bottom: none;
+        padding-bottom: 0;
+      }
+
+      .detail-label {
+        color: $text-secondary;
+        font-size: 14px;
+      }
+
+      .detail-value {
+        color: $text-primary;
+        font-size: 14px;
+        font-weight: 500;
+      }
+    }
+  }
+}
+
+@keyframes fadeIn {
+  from { opacity: 0; transform: translateY(-10px); }
+  to { opacity: 1; transform: translateY(0); }
 }
