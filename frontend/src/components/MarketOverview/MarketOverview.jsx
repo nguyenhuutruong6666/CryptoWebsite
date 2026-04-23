@@ -4,7 +4,6 @@ import { getCoinLogo, getCoinColor } from '../../utils/coinHelpers';
 import './MarketOverview.scss';
 
 function formatPrice(price) {
-  // Fix format string cho giá trị nhỏ
   if (price < 0.01) {
     return `$${price.toLocaleString('en-US', { minimumFractionDigits: 4, maximumFractionDigits: 6 })}`;
   }
@@ -72,7 +71,7 @@ export default function MarketOverview() {
   }, [markets]);
 
   const newListings = useMemo(() => {
-    return markets.slice(10, 13); // lấy giả lập vài token index ngẫu nhiên làm danh sách niêm yết mới
+    return markets.slice(10, 13);
   }, [markets]);
 
   return (

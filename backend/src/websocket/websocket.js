@@ -3,15 +3,15 @@ const binanceService = require('../services/binanceService');
 let updateInterval = null;
 
 function initializeWebSocket(io) {
-  console.log('🔌 WebSocket server initialized');
+  console.log('WebSocket server initialized');
 
   io.on('connection', (socket) => {
-    console.log(`✅ Client connected: ${socket.id}`);
+    console.log(`Client connected: ${socket.id}`);
 
     sendInitialData(socket);
 
     socket.on('disconnect', () => {
-      console.log(`❌ Client disconnected: ${socket.id}`);
+      console.log(`Client disconnected: ${socket.id}`);
     });
   });
 
@@ -41,7 +41,7 @@ function startPriceUpdates(io) {
         timestamp: Date.now()
       });
       if (io.engine.clientsCount > 0) {
-        console.log(`📊 Price update → ${io.engine.clientsCount} client(s)`);
+        console.log(`Price update → ${io.engine.clientsCount} client(s)`);
       }
     } catch (error) {
       console.error('Error sending price update:', error.message);
@@ -53,7 +53,7 @@ function stopPriceUpdates() {
   if (updateInterval) {
     clearInterval(updateInterval);
     updateInterval = null;
-    console.log('⏹️ Price updates stopped');
+    console.log('Price updates stopped');
   }
 }
 

@@ -6,7 +6,6 @@
   background-color: $bg-primary;
 }
 
-// ============== Left Brand Panel ==============
 
 .auth-brand-panel {
   flex: 1;
@@ -98,7 +97,6 @@
   }
 }
 
-// Floating orbs
 .auth-brand-orbs {
   position: absolute;
   inset: 0;
@@ -136,7 +134,6 @@
   }
 }
 
-// Ticker strip at bottom
 .auth-ticker-strip {
   display: flex;
   gap: $spacing-lg;
@@ -159,7 +156,6 @@
   }
 }
 
-// ============== Right Form Panel ==============
 
 .auth-form-panel {
   width: 480px;

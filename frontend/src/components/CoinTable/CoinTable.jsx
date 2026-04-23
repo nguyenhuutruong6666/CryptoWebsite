@@ -1,6 +1,9 @@
 import { useState, useEffect, useRef } from 'react';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import { useMarket } from '../../store/MarketContext';
+import { useAuth } from '../../store/AuthContext';
+import { useToast } from '../../store/ToastContext';
+import { favoriteService } from '../../services/favoriteService';
 import { getCoinLogo, getCoinColor, getCoinName } from '../../utils/coinHelpers';
 import { formatNumber, formatPrice } from '../../utils/formatters';
 import Pagination from '../Common/Pagination';
@@ -8,7 +11,6 @@ import './CoinTable.scss';
 
 const PRIORITY_COINS = ['BTC', 'ETH', 'USDT', 'BNB', 'XRP', 'USDC', 'SOL', 'ADA', 'DOGE', 'MATIC'];
 
-// Đồng bộ logic với MarketOverview — mỗi category lấy 10 coin
 const POPULAR_COINS = ['BTC', 'ETH', 'BNB', 'XRP', 'SOL', 'ADA', 'DOGE', 'MATIC', 'AVAX', 'LTC'];
 
 function getCategoryCoins(markets, filter) {
@@ -19,25 +21,72 @@ function getCategoryCoins(markets, filter) {
         const coin = markets.find(c => c.symbol === sym);
         if (coin) result.push(coin);
       });
-      return result; // tối đa 10
+      return result;
     }
     case 'new':
-      return markets.slice(10, 20); // đồng bộ với MarketOverview (slice 10)
+      return markets.slice(10, 20);
     case 'gainers':
       return [...markets].filter(c => c.change24h > 0).sort((a, b) => b.change24h - a.change24h).slice(0, 10);
     case 'volume':
       return [...markets].sort((a, b) => b.volume24h - a.volume24h).slice(0, 10);
     default:
-      return null; // null = dùng toàn bộ markets
+      return null;
   }
 }
 
 export default function CoinTable({ searchQuery = '', activeFilter = 'all', favoriteSymbols = null }) {
   const { markets, isConnected } = useMarket();
+  const { user } = useAuth();
+  const { addToast } = useToast();
+  const navigate = useNavigate();
+
   const [sortBy, setSortBy] = useState('volume');
   const [sortOrder, setSortOrder] = useState('desc');
   const [flashingCells, setFlashingCells] = useState(new Set());
+  const [localFavorites, setLocalFavorites] = useState(new Set());
+  const [togglingSymbols, setTogglingSymbols] = useState(new Set());
   const prevPricesRef = useRef(new Map());
+
+  useEffect(() => {
+    if (user) {
+      favoriteService.getFavorites().then(res => {
+        if (res.success) {
+          setLocalFavorites(new Set(res.data.map(f => f.symbol)));
+        }
+      });
+    } else {
+      setLocalFavorites(new Set());
+    }
+  }, [user]);
+
+  const toggleFavorite = async (symbol, e) => {
+    e.preventDefault();
+    e.stopPropagation();
+
+    if (!user) {
+      addToast('Vui lòng đăng nhập để sử dụng tính năng này', 'error');
+      return navigate('/login');
+    }
+
+    setTogglingSymbols(prev => new Set(prev).add(symbol));
+    const res = await favoriteService.toggleFavorite(symbol);
+    setTogglingSymbols(prev => {
+      const next = new Set(prev);
+      next.delete(symbol);
+      return next;
+    });
+
+    if (res.success) {
+      setLocalFavorites(prev => {
+        const next = new Set(prev);
+        if (res.isFavorited) next.add(symbol);
+        else next.delete(symbol);
+        return next;
+      });
+    } else {
+      addToast(res.message, 'error');
+    }
+  };
 
   useEffect(() => {
     const newFlashing = new Set();
@@ -83,7 +132,6 @@ export default function CoinTable({ searchQuery = '', activeFilter = 'all', favo
   });
 
   const sortedMarkets = [...filteredMarkets].sort((a, b) => {
-    // Khi đang ở category filter → giữ nguyên thứ tự category đã xác định
     if (activeFilter !== 'all') {
       let aVal = a[sortBy];
       let bVal = b[sortBy];
@@ -95,7 +143,6 @@ export default function CoinTable({ searchQuery = '', activeFilter = 'all', favo
       return 0;
     }
 
-    // Tất cả: ưu tiên PRIORITY_COINS trước
     const aPri = PRIORITY_COINS.indexOf(a.symbol);
     const bPri = PRIORITY_COINS.indexOf(b.symbol);
     if (aPri !== -1 && bPri !== -1) return aPri - bPri;
@@ -129,7 +176,6 @@ export default function CoinTable({ searchQuery = '', activeFilter = 'all', favo
     setCurrentPage(1);
   }, [searchQuery, activeFilter, sortBy, sortOrder]);
 
-  // Category filters đã giới hạn 10 coin — không cần phân trang
   const totalPages = isCategoryFilter ? 1 : Math.ceil(sortedMarkets.length / ITEMS_PER_PAGE);
   const currentData = isCategoryFilter
     ? sortedMarkets
@@ -150,6 +196,7 @@ export default function CoinTable({ searchQuery = '', activeFilter = 'all', favo
         <table className="coin-table">
           <thead>
             <tr>
+              <th style={{ width: '40px' }}>★</th>
               <th>#</th>
               <th onClick={() => handleSort('name')} className="sortable">
                 Tên <SortIcon col="name" />
@@ -177,8 +224,25 @@ export default function CoinTable({ searchQuery = '', activeFilter = 'all', favo
                 ? 'flash-red'
                 : '';
 
+              const isFav = localFavorites.has(coin.symbol);
+              const isToggling = togglingSymbols.has(coin.symbol);
+
               return (
                 <tr key={coin.symbol} className={`coin-row ${flashClass}`}>
+                  <td className="fav-cell" onClick={(e) => toggleFavorite(coin.symbol, e)} style={{ cursor: 'pointer' }}>
+                    <svg 
+                      viewBox="0 0 24 24" width="18" height="18" 
+                      fill={isFav ? '#f2a900' : 'none'} 
+                      stroke={isFav ? '#f2a900' : '#888'} 
+                      strokeWidth="2"
+                      style={{ 
+                        transition: 'transform 0.2s', 
+                        transform: isToggling ? 'scale(0.8)' : 'scale(1)' 
+                      }}
+                    >
+                      <polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2" />
+                    </svg>
+                  </td>
                   <td className="rank-cell">{(currentPage - 1) * ITEMS_PER_PAGE + index + 1}</td>
                   <td className="name-cell">
                     <Link to={`/coin/${coin.symbol.toLowerCase()}`} className="coin-link">

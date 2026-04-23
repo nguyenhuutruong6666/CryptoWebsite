@@ -4,7 +4,7 @@ import AuthLayout from '../../components/Auth/AuthLayout/AuthLayout';
 import FormInput from '../../components/Auth/FormInput/FormInput';
 import { useAuth } from '../../store/AuthContext';
 import { useToast } from '../../store/ToastContext';
-import '../LoginPage/LoginPage.scss'; // Reuse styles from LoginPage
+import '../LoginPage/LoginPage.scss';
 
 const EmailIcon = () => (
   <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={2}>

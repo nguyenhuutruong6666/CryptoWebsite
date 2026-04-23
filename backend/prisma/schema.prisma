@@ -9,7 +9,7 @@ datasource db {
 
 model Role {
   id        String   @id @default(uuid())
-  name      String   @unique // "ADMIN", "USER"
+  name      String   @unique
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
 
@@ -17,15 +17,28 @@ model Role {
 }
 
 model User {
-  id                String    @id @default(uuid())
+  id                String     @id @default(uuid())
   roleId            String
-  role              Role      @relation(fields: [roleId], references: [id])
+  role              Role       @relation(fields: [roleId], references: [id])
   name              String
-  email             String    @unique
+  email             String     @unique
   password          String
   phone             String?
-  tier              String    @default("Thành viên")
-  verificationLevel String    @default("Chưa xác minh")
-  createdAt         DateTime  @default(now())
-  updatedAt         DateTime  @updatedAt
+  tier              String     @default("Thành viên")
+  verificationLevel String     @default("Chưa xác minh")
+  createdAt         DateTime   @default(now())
+  updatedAt         DateTime   @updatedAt
+
+  favorites         Favorite[]
+}
+
+model Favorite {
+  id        String   @id @default(uuid())
+  userId    String
+  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  symbol    String
+  createdAt DateTime @default(now())
+
+  @@unique([userId, symbol])
+  @@map("favorites")
 }

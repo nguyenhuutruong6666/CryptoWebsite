@@ -5,16 +5,12 @@ const prisma = new PrismaClient();
 
 async function main() {
   const hashedPassword = await bcrypt.hash('123456', 10);
-  
-  // Dọn dẹp Database cũ (Chú ý thứ tự quan hệ logic)
   await prisma.user.deleteMany();
   await prisma.role.deleteMany();
 
-  // Khởi tạo bảng danh mục Role
   const roleAdmin = await prisma.role.create({ data: { name: 'ADMIN' } });
   const roleUser = await prisma.role.create({ data: { name: 'USER' } });
 
-  // Khởi tạo Admin có móc roleId
   const adminUser = await prisma.user.create({
     data: {
       email: 'admin@tcrypto.com',

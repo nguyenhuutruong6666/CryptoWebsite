@@ -1,7 +1,10 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import { useMarket } from '../../store/MarketContext';
 import { usePriceHistory } from '../../hooks/usePriceHistory';
+import { useAuth } from '../../store/AuthContext';
+import { useToast } from '../../store/ToastContext';
+import { favoriteService } from '../../services/favoriteService';
 import Navbar from '../../components/Navbar/Navbar';
 import PriceChart from '../../components/PriceChart/PriceChart';
 import CoinStats from '../../components/CoinStats/CoinStats';
@@ -13,11 +16,42 @@ export default function CoinDetailPage() {
   const { symbol } = useParams();
   const navigate = useNavigate();
   const [timeframe, setTimeframe] = useState('1h');
+  const [isFavorited, setIsFavorited] = useState(false);
+  const [isToggling, setIsToggling] = useState(false);
+
+  const { user } = useAuth();
+  const { addToast } = useToast();
 
   const { markets, isConnected } = useMarket();
   const { priceHistory, isLoading } = usePriceHistory(symbol?.toUpperCase(), timeframe);
 
   const coin = markets.find(m => m.symbol === symbol?.toUpperCase());
+
+  useEffect(() => {
+    if (user && symbol) {
+      favoriteService.checkFavorite(symbol).then(res => {
+        if (res.success) setIsFavorited(res.isFavorited);
+      });
+    }
+  }, [user, symbol]);
+
+  const handleToggleFavorite = async () => {
+    if (!user) {
+      addToast('Vui lòng đăng nhập để thêm vào yêu thích', 'error');
+      return navigate('/login');
+    }
+    
+    setIsToggling(true);
+    const res = await favoriteService.toggleFavorite(symbol);
+    setIsToggling(false);
+    
+    if (res.success) {
+      setIsFavorited(res.isFavorited);
+      addToast(res.message, 'success');
+    } else {
+      addToast(res.message || 'Có lỗi xảy ra', 'error');
+    }
+  };
 
   if (!coin && markets.length === 0) {
     return (
@@ -75,7 +109,25 @@ export default function CoinDetailPage() {
                 />
               </div>
               <div className="coin-header-names">
-                <h1 className="coin-header-symbol">{coin?.symbol}</h1>
+                <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
+                  <h1 className="coin-header-symbol">{coin?.symbol}</h1>
+                  <button 
+                    onClick={handleToggleFavorite}
+                    disabled={isToggling}
+                    style={{
+                      background: 'none', border: 'none', cursor: 'pointer',
+                      color: isFavorited ? '#f6465d' : '#666',
+                      transition: 'transform 0.2s, color 0.2s',
+                      transform: isToggling ? 'scale(0.9)' : 'scale(1)',
+                      padding: '4px', display: 'flex'
+                    }}
+                    title={isFavorited ? 'Xóa khỏi yêu thích' : 'Thêm vào yêu thích'}
+                  >
+                    <svg viewBox="0 0 24 24" width="24" height="24" fill={isFavorited ? 'currentColor' : 'none'} stroke="currentColor" strokeWidth="2">
+                      <path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z" />
+                    </svg>
+                  </button>
+                </div>
                 <span className="coin-header-fullname">{getCoinName(coin?.symbol)}</span>
               </div>
             </div>

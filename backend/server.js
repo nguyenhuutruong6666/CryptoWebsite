@@ -29,12 +29,14 @@ const io = new Server(server, {
   }
 });
 
-const authRoutes = require('./src/routes/authRoutes');
+const authRoutes     = require('./src/routes/authRoutes');
+const favoriteRoutes = require('./src/routes/favoriteRoutes');
 
 initializeWebSocket(io);
 
-app.use('/api/markets', marketRoutes);
-app.use('/api/auth', authRoutes);
+app.use('/api/markets',   marketRoutes);
+app.use('/api/auth',      authRoutes);
+app.use('/api/favorites', favoriteRoutes);
 
 app.get('/health', (req, res) => {
   res.json({
@@ -51,12 +53,23 @@ app.get('/', (req, res) => {
     endpoints: {
       health: '/health',
       markets: {
-        all: '/api/markets/all',
+        all:     '/api/markets/all',
         popular: '/api/markets/popular',
         gainers: '/api/markets/gainers',
-        volume: '/api/markets/volume',
-        new: '/api/markets/new',
+        volume:  '/api/markets/volume',
+        new:     '/api/markets/new',
         history: '/api/markets/history/:symbol'
+      },
+      auth: {
+        login:   '/api/auth/login',
+        register:'/api/auth/register',
+        profile: '/api/auth/profile'
+      },
+      favorites: {
+        list:   'GET  /api/favorites',
+        toggle: 'POST /api/favorites/toggle',
+        check:  'GET  /api/favorites/:symbol',
+        remove: 'DELETE /api/favorites/:symbol'
       }
     }
   });
