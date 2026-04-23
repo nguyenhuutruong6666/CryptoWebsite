@@ -8,6 +8,7 @@ import { favoriteService } from '../../services/favoriteService';
 import Navbar from '../../components/Navbar/Navbar';
 import PriceChart from '../../components/PriceChart/PriceChart';
 import CoinStats from '../../components/CoinStats/CoinStats';
+import Footer from '../../components/Footer/Footer';
 import { getCoinLogo, getCoinColor, getCoinName } from '../../utils/coinHelpers';
 import { formatPrice, formatPercent } from '../../utils/formatters';
 import './CoinDetailPage.scss';
@@ -156,6 +157,7 @@ export default function CoinDetailPage() {
 
         {coin && <CoinStats coin={coin} />}
       </main>
+      <Footer />
     </div>
   );
 }

@@ -5,6 +5,7 @@ import FormInput from '../../components/Auth/FormInput/FormInput';
 import { useAuth } from '../../store/AuthContext';
 import { useToast } from '../../store/ToastContext';
 import ConfirmDialog from '../../components/Common/ConfirmDialog';
+import Footer from '../../components/Footer/Footer';
 import './ProfilePage.scss';
 
 export default function ProfilePage() {
@@ -197,6 +198,7 @@ export default function ProfilePage() {
         onConfirm={executeSave}
         onCancel={() => setShowConfirm(false)}
       />
+      <Footer />
     </div>
   );
 }

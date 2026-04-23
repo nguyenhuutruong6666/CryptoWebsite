@@ -1,6 +1,7 @@
 import { useState, useEffect } from 'react';
 import Navbar from '../../components/Navbar/Navbar';
 import CoinTable from '../../components/CoinTable/CoinTable';
+import Footer from '../../components/Footer/Footer';
 import { favoriteService } from '../../services/favoriteService';
 import { useAuth } from '../../store/AuthContext';
 import './FavoritesPage.scss';
@@ -52,6 +53,7 @@ export default function FavoritesPage() {
           />
         )}
       </main>
+      <Footer />
     </div>
   );
 }

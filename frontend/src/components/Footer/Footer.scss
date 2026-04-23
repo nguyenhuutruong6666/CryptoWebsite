@@ -1,0 +1,123 @@
+@use '../../styles/variables' as *;
+
+.footer {
+  background-color: $bg-secondary;
+  border-top: 1px solid $border-color;
+  padding: $spacing-2xl 0 $spacing-xl;
+  margin-top: auto;
+}
+
+.footer-container {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 0 $spacing-lg;
+}
+
+.footer-grid {
+  display: grid;
+  grid-template-columns: 2fr 1fr 1fr 1fr;
+  gap: $spacing-2xl;
+  margin-bottom: $spacing-2xl;
+}
+
+.footer-brand {
+  display: flex;
+  flex-direction: column;
+  gap: $spacing-md;
+
+  .brand-logo {
+    font-size: 24px;
+    font-weight: 700;
+    color: $yellow;
+    text-decoration: none;
+  }
+
+  .brand-desc {
+    color: $text-secondary;
+    font-size: 14px;
+    line-height: 1.6;
+    max-width: 300px;
+  }
+}
+
+.footer-links-group {
+  h4 {
+    color: $text-primary;
+    font-size: 16px;
+    font-weight: 600;
+    margin-bottom: $spacing-lg;
+  }
+
+  ul {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+    display: flex;
+    flex-direction: column;
+    gap: $spacing-sm;
+  }
+
+  a {
+    color: $text-secondary;
+    text-decoration: none;
+    font-size: 14px;
+    transition: color 0.2s;
+
+    &:hover {
+      color: $yellow;
+    }
+  }
+}
+
+.footer-bottom {
+  border-top: 1px solid $border-color;
+  padding-top: $spacing-xl;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: $spacing-md;
+
+  .copyright {
+    color: $text-secondary;
+    font-size: 14px;
+  }
+
+  .social-links {
+    display: flex;
+    gap: $spacing-md;
+
+    a {
+      color: $text-secondary;
+      transition: color 0.2s;
+      
+      &:hover {
+        color: $yellow;
+      }
+      
+      svg {
+        width: 20px;
+        height: 20px;
+      }
+    }
+  }
+}
+
+@media (max-width: 900px) {
+  .footer-grid {
+    grid-template-columns: 1fr 1fr;
+  }
+  .footer-brand {
+    grid-column: 1 / -1;
+  }
+}
+
+@media (max-width: 480px) {
+  .footer-grid {
+    grid-template-columns: 1fr;
+  }
+  .footer-bottom {
+    flex-direction: column;
+    text-align: center;
+  }
+}
