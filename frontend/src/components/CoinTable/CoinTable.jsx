@@ -8,6 +8,30 @@ import './CoinTable.scss';
 
 const PRIORITY_COINS = ['BTC', 'ETH', 'USDT', 'BNB', 'XRP', 'USDC', 'SOL', 'ADA', 'DOGE', 'MATIC'];
 
+// Đồng bộ logic với MarketOverview — mỗi category lấy 10 coin
+const POPULAR_COINS = ['BTC', 'ETH', 'BNB', 'XRP', 'SOL', 'ADA', 'DOGE', 'MATIC', 'AVAX', 'LTC'];
+
+function getCategoryCoins(markets, filter) {
+  switch (filter) {
+    case 'popular': {
+      const result = [];
+      POPULAR_COINS.forEach(sym => {
+        const coin = markets.find(c => c.symbol === sym);
+        if (coin) result.push(coin);
+      });
+      return result; // tối đa 10
+    }
+    case 'new':
+      return markets.slice(10, 20); // đồng bộ với MarketOverview (slice 10)
+    case 'gainers':
+      return [...markets].filter(c => c.change24h > 0).sort((a, b) => b.change24h - a.change24h).slice(0, 10);
+    case 'volume':
+      return [...markets].sort((a, b) => b.volume24h - a.volume24h).slice(0, 10);
+    default:
+      return null; // null = dùng toàn bộ markets
+  }
+}
+
 export default function CoinTable({ searchQuery = '', activeFilter = 'all', favoriteSymbols = null }) {
   const { markets, isConnected } = useMarket();
   const [sortBy, setSortBy] = useState('volume');
@@ -46,9 +70,11 @@ export default function CoinTable({ searchQuery = '', activeFilter = 'all', favo
     </span>
   );
 
-  const filteredMarkets = markets.filter(coin => {
+  const categoryCoins = getCategoryCoins(markets, activeFilter);
+  const baseList = categoryCoins ?? markets;
+
+  const filteredMarkets = baseList.filter(coin => {
     if (favoriteSymbols && !favoriteSymbols.includes(coin.symbol)) return false;
-    
     if (searchQuery) {
       const q = searchQuery.toLowerCase();
       return coin.symbol.toLowerCase().includes(q) || getCoinName(coin.symbol).toLowerCase().includes(q);
@@ -57,6 +83,19 @@ export default function CoinTable({ searchQuery = '', activeFilter = 'all', favo
   });
 
   const sortedMarkets = [...filteredMarkets].sort((a, b) => {
+    // Khi đang ở category filter → giữ nguyên thứ tự category đã xác định
+    if (activeFilter !== 'all') {
+      let aVal = a[sortBy];
+      let bVal = b[sortBy];
+      if (sortBy === 'change') { aVal = a.change24h; bVal = b.change24h; }
+      else if (sortBy === 'volume') { aVal = a.volume24h; bVal = b.volume24h; }
+      else if (sortBy === 'marketCap') { aVal = a.marketCap; bVal = b.marketCap; }
+      if (aVal < bVal) return sortOrder === 'asc' ? -1 : 1;
+      if (aVal > bVal) return sortOrder === 'asc' ? 1 : -1;
+      return 0;
+    }
+
+    // Tất cả: ưu tiên PRIORITY_COINS trước
     const aPri = PRIORITY_COINS.indexOf(a.symbol);
     const bPri = PRIORITY_COINS.indexOf(b.symbol);
     if (aPri !== -1 && bPri !== -1) return aPri - bPri;
@@ -84,13 +123,17 @@ export default function CoinTable({ searchQuery = '', activeFilter = 'all', favo
 
   const [currentPage, setCurrentPage] = useState(1);
   const ITEMS_PER_PAGE = 10;
-  
+  const isCategoryFilter = activeFilter !== 'all';
+
   useEffect(() => {
-    setCurrentPage(1); // Reset page on filter changes
+    setCurrentPage(1);
   }, [searchQuery, activeFilter, sortBy, sortOrder]);
 
-  const totalPages = Math.ceil(sortedMarkets.length / ITEMS_PER_PAGE);
-  const currentData = sortedMarkets.slice((currentPage - 1) * ITEMS_PER_PAGE, currentPage * ITEMS_PER_PAGE);
+  // Category filters đã giới hạn 10 coin — không cần phân trang
+  const totalPages = isCategoryFilter ? 1 : Math.ceil(sortedMarkets.length / ITEMS_PER_PAGE);
+  const currentData = isCategoryFilter
+    ? sortedMarkets
+    : sortedMarkets.slice((currentPage - 1) * ITEMS_PER_PAGE, currentPage * ITEMS_PER_PAGE);
 
   return (
     <div className="coin-table-container">
@@ -185,11 +228,13 @@ export default function CoinTable({ searchQuery = '', activeFilter = 'all', favo
         )}
       </div>
 
-      <Pagination 
-        currentPage={currentPage}
-        totalPages={totalPages}
-        onPageChange={setCurrentPage}
-      />
+      {!isCategoryFilter && (
+        <Pagination
+          currentPage={currentPage}
+          totalPages={totalPages}
+          onPageChange={setCurrentPage}
+        />
+      )}
     </div>
   );
 }

@@ -2,16 +2,11 @@ import { useState } from 'react';
 import './FilterTabs.scss';
 
 const FILTER_TAGS = [
-  { id: 'all', label: 'Tất cả' },
-  { id: 'bnb', label: 'BNB Chain' },
-  { id: 'sol', label: 'Solana' },
-  { id: 'rwa', label: 'RWA' },
-  { id: 'meme', label: 'Meme' },
-  { id: 'ai', label: 'AI' },
-  { id: 'layer1', label: 'Layer 1' },
-  { id: 'layer2', label: 'Layer 2' },
-  { id: 'defi', label: 'DeFi' },
-  { id: 'gaming', label: 'Gaming' },
+  { id: 'all',     label: 'Tất cả' },
+  { id: 'popular', label: 'Phổ biến' },
+  { id: 'new',     label: 'Niêm yết mới' },
+  { id: 'gainers', label: 'Top tăng giá' },
+  { id: 'volume',  label: 'Top khối lượng' },
 ];
 
 export default function FilterTabs({ activeFilter, onFilterChange }) {
